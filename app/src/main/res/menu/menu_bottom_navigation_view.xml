@@ -2,29 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/item_bottom_1"
+        android:id="@+id/item_bottom_library"
         android:enabled="true"
         android:icon="@drawable/bottom_ic_library_normal"
         android:title="个人图书馆"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/item_bottom_2"
+        android:id="@+id/item_bottom_drift"
         android:enabled="true"
         android:icon="@drawable/bottom_ic_drift_normal"
         android:title="图书漂流"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/item_bottom_3"
+        android:id="@+id/item_bottom_freetalk"
         android:enabled="true"
         android:icon="@drawable/bottom_ic_freetalk_normal"
         android:title="自由谈"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/item_bottom_4"
+        android:id="@+id/item_bottom_person"
         android:enabled="true"
         android:icon="@drawable/bottom_ic_person_normal"
         android:title="个人"
         app:showAsAction="ifRoom" />
-        />
 
 </menu>
