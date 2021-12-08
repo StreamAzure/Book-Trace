@@ -1,11 +1,14 @@
 package com.jnu.booktrace;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.Manifest;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -19,6 +22,8 @@ import com.jnu.booktrace.fragments.PersonFragment;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int PERMS_REQUEST_CODE = 100;
+
     BottomNavigationView bottomNavigationView;
     private List<Fragment> fragmentList;
     private LibraryFragment libraryFragment;
@@ -31,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initFragment(); //将底部导航栏各按钮与对应Fragment绑定
+        myRequestPermission();
+    }
+
+    private void myRequestPermission(){
+        //6.0版本或以上需请求权限
+        String[] permissions=new String[]{Manifest.permission.
+                WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            requestPermissions(permissions,PERMS_REQUEST_CODE);
+        }
     }
 
     private void initFragment() {
