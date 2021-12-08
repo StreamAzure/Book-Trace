@@ -1,5 +1,6 @@
 package com.jnu.booktrace.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,10 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.jnu.booktrace.R;
+import com.jnu.booktrace.ScanActivity;
 
 public class LibraryFragment extends Fragment {
+    private Button button;
 
     public LibraryFragment() {}
     public static LibraryFragment newInstance() {
@@ -31,7 +35,16 @@ public class LibraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_library, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_library, container, false);
+        button = rootView.findViewById(R.id.btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ScanActivity.class);
+                startActivity(intent);
+            }
+        });
+        return rootView;
     }
 
     public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{

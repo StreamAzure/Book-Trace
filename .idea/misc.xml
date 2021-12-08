@@ -4,10 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/activity_main.xml" value="0.2390625" />
+        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/activity_scan.xml" value="0.20572916666666666" />
+        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/content_scan.xml" value="0.20572916666666666" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_drift.xml" value="0.17447916666666666" />
+        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_first.xml" value="0.1" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_free_talk.xml" value="0.17447916666666666" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_library.xml" value="0.17447916666666666" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_person.xml" value="0.17447916666666666" />
+        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/title_top_white.xml" value="0.20572916666666666" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/menu/menu_bottom_navigation_view.xml" value="0.17447916666666666" />
       </map>
     </option>
