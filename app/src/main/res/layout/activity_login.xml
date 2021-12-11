@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    tools:context=".Login.LoginActivity">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:src="@mipmap/booktrace"/>
+
+    <EditText
+        android:id="@+id/login_account"
+        android:layout_width="207dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="用户名"
+        android:maxLines="1"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/login_pwd"
+        android:layout_width="207dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="密码"
+        android:maxLines="1"
+        android:textSize="20sp"
+        android:inputType="textPassword"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <Button
+            android:id="@+id/login_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确定"/>
+        <Button
+            android:id="@+id/login_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/login_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onclick"
+        android:text="注册账号"
+        tools:ignore="OnClick" />
+
+</LinearLayout>
