@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 }else{
                     person.setName(name);
                     person.setPassword(password);
-
+                    DBManager.insertPersontb(person);
                 }
             }
         }else {
