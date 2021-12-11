@@ -6,12 +6,11 @@ public class Book {
     private String isbn13;
     private String title;
     private String image;
-    private String[] images; //0小号，1中号，2大号
-    private String[] author;
-    private String[] translator;
+    private String author;
+    private String translator;
     private String publisher;
     private String pubdate;
-    private String[] tags;
+    private String tags;
     private String binding;
     private String price;
     private int pages;
@@ -58,19 +57,19 @@ public class Book {
         this.image = image;
     }
 
-    public String[] getAuthor() {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String[] author) {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
-    public String[] getTranslator() {
+    public String getTranslator() {
         return translator;
     }
 
-    public void setTranslator(String[] translator) {
+    public void setTranslator(String translator) {
         this.translator = translator;
     }
 
@@ -90,11 +89,11 @@ public class Book {
         this.pubdate = pubdate;
     }
 
-    public String[] getTags() {
+    public String getTags() {
         return tags;
     }
 
-    public void setTags(String[] tags) {
+    public void setTags(String tags) {
         this.tags = tags;
     }
 
@@ -102,6 +101,10 @@ public class Book {
         return binding;
     }
 
+    /**
+     *
+     * @param binding 规格，精装/平装
+     */
     public void setBinding(String binding) {
         this.binding = binding;
     }
@@ -118,6 +121,10 @@ public class Book {
         return pages;
     }
 
+    /**
+     *
+     * @param pages 页数
+     */
     public void setPages(int pages) {
         this.pages = pages;
     }
@@ -126,6 +133,10 @@ public class Book {
         return author_intro;
     }
 
+    /**
+     *
+     * @param author_intro 作者简介
+     */
     public void setAuthor_intro(String author_intro) {
         this.author_intro = author_intro;
     }
@@ -134,6 +145,9 @@ public class Book {
         return summary;
     }
 
+    /**
+     * @param summary 书籍简介
+     */
     public void setSummary(String summary) {
         this.summary = summary;
     }
