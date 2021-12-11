@@ -7,8 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    //数据库版本号
-    private static Integer Version = 1;
+    private static Integer Version = 1;     //数据库版本号
 
     public DatabaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -21,6 +20,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sql = "create table persontb (id integer primary key autoincrement, name varchar(25) not null unique, " +
                 "password varchar(50) not null, nickname varchar(20), description varchar(100))";
         db.execSQL(sql);
+
+        //创建书籍基本信息表，ISBN号均可作为主键
+        String createBookTable = "create table booktb (isbn varchar(15) not null unique, " +
+                "id varchar(25), title text, image text, author varchar(100), translator varchar(100), " +
+                "publisher varchar(100), pubdate varchar(25), tags varchar(100), binding varchar(20), price varchar(25), "+
+                "pages integer, author_intro text, summary text)";
+        db.execSQL(createBookTable);
+
     }
 
     //数据库版本发生改变时调用
@@ -28,6 +35,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
-
 }
