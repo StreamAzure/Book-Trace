@@ -1,8 +1,8 @@
 package com.jnu.booktrace.bean;
 
 /*
-* 作用：用户个人信息类
-* 功能：保存用户的个人信息
+* @作用：用户个人信息类
+* @功能：保存用户的个人信息
 **/
 public class Person {
     private int id;
