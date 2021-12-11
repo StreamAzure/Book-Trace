@@ -2,11 +2,13 @@ package com.jnu.booktrace.database;
 
 
 import android.annotation.SuppressLint;
-import android.app.Person;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.jnu.booktrace.bean.Person;
 
 /*
 * 负责管理数据库对表中的数据进行增删改查
