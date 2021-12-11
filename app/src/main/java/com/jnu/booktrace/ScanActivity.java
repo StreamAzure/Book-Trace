@@ -36,6 +36,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.common.BitArray;
 import com.google.zxing.oned.OneDReader;
 import com.jnu.booktrace.R;
@@ -206,26 +207,26 @@ public class ScanActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     public void handleResult(final Result scanResult, Bitmap thumbnailImage,
                              final float thumbnailScaleFactor) {
-        vibrate();
-        // superimpose dots to highlight the key features of the qr code
-        final ResultPoint[] points = scanResult.getResultPoints();
-        if (points != null && points.length > 0) {
-            final Paint paint = new Paint();
-            paint.setColor(getResources().getColor(R.color.scan_result_dots));
-            paint.setStrokeWidth(10.0f);
-
-            final Canvas canvas = new Canvas(thumbnailImage);
-            canvas.scale(thumbnailScaleFactor, thumbnailScaleFactor);
-            for (final ResultPoint point : points)
-                canvas.drawPoint(point.getX(), point.getY(), paint);
-        }
-
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90);
-        thumbnailImage = Bitmap.createBitmap(thumbnailImage, 0, 0,
-                thumbnailImage.getWidth(), thumbnailImage.getHeight(), matrix,
-                false);
-        scannerView.drawResultBitmap(thumbnailImage);
+//        vibrate();
+//        // superimpose dots to highlight the key features of the qr code
+//        final ResultPoint[] points = scanResult.getResultPoints();
+//        if (points != null && points.length > 0) {
+//            final Paint paint = new Paint();
+//            paint.setColor(getResources().getColor(R.color.scan_result_dots));
+//            paint.setStrokeWidth(10.0f);
+//
+//            final Canvas canvas = new Canvas(thumbnailImage);
+//            canvas.scale(thumbnailScaleFactor, thumbnailScaleFactor);
+//            for (final ResultPoint point : points)
+//                canvas.drawPoint(point.getX(), point.getY(), paint);
+//        }
+//
+//        Matrix matrix = new Matrix();
+//        matrix.postRotate(90);
+//        thumbnailImage = Bitmap.createBitmap(thumbnailImage, 0, 0,
+//                thumbnailImage.getWidth(), thumbnailImage.getHeight(), matrix,
+//                false);
+//        scannerView.drawResultBitmap(thumbnailImage);
 
         final Intent result = getIntent();
         Log.i("ansen","扫描结果:"+scanResult.getText());
@@ -339,6 +340,7 @@ public class ScanActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
     };
 
+    //处理从相册读取的信息
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         /*int foregroundCount = getForegroundCount();
@@ -366,13 +368,13 @@ public class ScanActivity extends AppCompatActivity implements SurfaceHolder.Cal
                         }
 //                        Log.i("ansen","扫描结果:"+text);
                         final String r = text;
-                        runOnUiThread(new Runnable() {
+                        runOnUiThread(new Runnable() { //刷新UI
                             @Override
                             public void run() {
                                 /*dp.dismiss();*/
                                 if (r == null) {
                                     fromGallery = false;
-                                    Toast.makeText(ScanActivity.this, R.string.scan_qr_code_from_photo_wrong, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(ScanActivity.this, R.string.scan_qr_code_from_photo_wrong, Toast.LENGTH_SHORT).show(); //报错信息
                                 } else {
                                     final Intent result = getIntent();
                                     Log.i("ansen","111 扫描结果:"+r);
@@ -393,7 +395,8 @@ public class ScanActivity extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private final Runnable fetchAndDecodeRunnable = new Runnable() {
-        private final QRCodeReader reader = new QRCodeReader();
+        private final MultiFormatReader reader = new MultiFormatReader();
+        //private final QRCodeReader reader = new QRCodeReader();
         private final Map<DecodeHintType, Object> hints = new EnumMap<DecodeHintType,
                 Object>(DecodeHintType.class);
 
@@ -421,15 +424,15 @@ public class ScanActivity extends AppCompatActivity implements SurfaceHolder.Cal
                             @Override
                             public void foundPossibleResultPoint(
                                     final ResultPoint dot) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        scannerView.addDot(dot);
-                                    }
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                scannerView.addDot(dot);
+                                            }
                                 });
                             }
                         });
-                final Result scanResult = reader.decode(bitmap, hints);
+                final Result scanResult = reader.decode(bitmap);//读取器解码
                 if (!resultValid(scanResult.getText())) {
                     cameraHandler.post(fetchAndDecodeRunnable);
                     return;
@@ -445,7 +448,7 @@ public class ScanActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 thumbnailImage.setPixels(source.renderThumbnail(), 0,
                         thumbnailWidth, 0, 0, thumbnailWidth, thumbnailHeight);
 
-                runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() { //在这个线程打印扫描结果日志
                     @Override
                     public void run() {
                         handleResult(scanResult, thumbnailImage,
@@ -454,6 +457,7 @@ public class ScanActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 });
             } catch (final Exception x) {
                 cameraHandler.post(fetchAndDecodeRunnable);
+                Log.e("ansen","出错");
             } finally {
                 reader.reset();
             }
