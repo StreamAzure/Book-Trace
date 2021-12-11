@@ -1,5 +1,6 @@
 package com.jnu.booktrace.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
+import com.jnu.booktrace.library.ShowBookOverviewActivity;
 import com.jnu.booktrace.utils.ISBNApiUtil;
 
 public class LibraryFragment extends Fragment {
@@ -39,13 +41,21 @@ public class LibraryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_library, container, false);
         button = rootView.findViewById(R.id.btn);
+        Button btnBookShow = rootView.findViewById(R.id.toBookShowActivity);
         editText = rootView.findViewById(R.id.et);
         button.setText("提交");
         Book book = new Book();
+        btnBookShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ShowBookOverviewActivity.class);
+                startActivity(intent);
+            }
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new ISBNApiUtil().getBookFromISBN(book, editText.getText().toString());
+                new ISBNApiUtil().getBookFromISBN(book,editText.getText().toString());
             }
         });
         return rootView;

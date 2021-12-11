@@ -1,5 +1,7 @@
 package com.jnu.booktrace.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,40 +12,21 @@ import androidx.annotation.NonNull;
 
 import com.jnu.booktrace.bean.Book;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.TreeMap;
 
 public class ISBNApiUtil {
     public static final String apikey = "11528.203958641994657fa3c05b913943515e.e5acbaf7197841cfa45c121acd0350d5";
     private static final int WHAT_ISBN_RESULT_OK = 200;
 
     public Book getBookFromISBN(Book book, String ISBN){
-        Handler handler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                super.handleMessage(msg);
-                if (msg.what == WHAT_ISBN_RESULT_OK) {
-                    String result = msg.getData().getString("data");
-                    try {
-                        if(parsonJson(result, book)){
-                            Log.e("MYTAG",result);
-                            Log.e("MYTAG",book.getTitle());
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -55,11 +38,11 @@ public class ISBNApiUtil {
                     String resultJson = download(ISBNRequest);
                     Log.e("MYTAG", resultJson);
 
-                    message.what= WHAT_ISBN_RESULT_OK;
-                    Bundle bundle = new Bundle();
-                    bundle.putString("data",resultJson);
-                    message.setData(bundle);
-                    handler.sendMessage(message);
+                    //不要发送Message，一收到响应立即解析并赋值，否则来不及赋值，主线程那边发现NULL会报错！
+                    if(parsonJson(resultJson, book)){
+                        Log.e("MYTAG",book.getTitle());
+                        Log.e("MYTAG",book.getImage());
+                    }
 
                 }catch (Exception e) {
                     e.printStackTrace();
@@ -109,8 +92,8 @@ public class ISBNApiUtil {
                 book.setId(bookInfo.getString("id"));
                 book.setTitle(bookInfo.getString("name"));
                 book.setImage(bookInfo.getString("photoUrl"));
-                book.setAuthor(bookInfo.getString("author"));//TODO:多个作者的情况？
-                book.setTranslator(bookInfo.getString("translator"));//TODO:多个译者的情况？
+                book.setAuthor(bookInfo.getString("author"));
+                book.setTranslator(bookInfo.getString("translator"));
                 book.setPublisher(bookInfo.getString("publishing"));
                 book.setPubdate(bookInfo.getString("published"));
                 book.setPrice(bookInfo.getString("price"));
@@ -125,5 +108,45 @@ public class ISBNApiUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    /**
+     * @description 新开一个线程从URL加载到bitmap
+     */
+    public void loadImageFromURL(Book book){
+        URL imgURL = null;
+        try {
+            imgURL = new URL(book.getImage());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        URL finalImgURL = imgURL;
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    HttpURLConnection connection = (HttpURLConnection) finalImgURL.openConnection();
+                    connection.setDoInput(true);
+                    connection.setConnectTimeout(600);
+                    connection.setUseCaches(false);
+                    connection.connect();
+                    InputStream inputStream = connection.getInputStream();
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    book.setImage_bitmap(bitmap);
+//                    Message message = Message.obtain();//从线程池里获取，避免new太多
+//                    message.what = WHAT_LOAD_IMAGE_OK;
+//                    message.obj = bitmap;
+//                    handler.sendMessage(message);
+                    inputStream.close();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        new Thread(runnable).start();//线程启动读取网络数据
     }
 }

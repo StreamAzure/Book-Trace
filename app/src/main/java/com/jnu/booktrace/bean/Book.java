@@ -1,11 +1,14 @@
 package com.jnu.booktrace.bean;
 
+import android.graphics.Bitmap;
+
 public class Book {
     private String id;
     private String isbn10;
     private String isbn13;
     private String title;
     private String image;
+    private Bitmap image_bitmap;
     private String author;
     private String translator;
     private String publisher;
@@ -150,5 +153,13 @@ public class Book {
      */
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public Bitmap getImage_bitmap() {
+        return image_bitmap;
+    }
+
+    public void setImage_bitmap(Bitmap image_bitmap) {
+        this.image_bitmap = image_bitmap;
     }
 }
