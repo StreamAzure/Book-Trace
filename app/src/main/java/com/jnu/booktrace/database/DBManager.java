@@ -28,7 +28,9 @@ public class DBManager {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name",person.getName());
         contentValues.put("password",person.getPassword());
-        
+        contentValues.put("nickname",person.getNickName());
+        contentValues.put("description",person.getDescription());
+        db.insert("persontb",null,contentValues);
     }
     /*
     * 判断输入的用户在数据库中是否存在
