@@ -1,12 +1,12 @@
-package com.jnu.booktrace.library;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.jnu.booktrace.activity;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.jnu.booktrace.R;
 
-public class ShowBookDetailActivity extends AppCompatActivity {
+public class LibraryBookDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

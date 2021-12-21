@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Person;
 
 /*
@@ -47,5 +48,31 @@ public class DBManager {
         if(result==1) return true;
         else return false;
         
+    }
+
+    public static void insertBooktb(Book book){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("isbn",book.getIsbn10());
+        contentValues.put("title",book.getTitle());
+        contentValues.put("image",book.getImage());
+        contentValues.put("author",book.getAuthor());
+        contentValues.put("translator",book.getTranslator());
+        contentValues.put("publisher",book.getPublisher());
+        contentValues.put("pubdate",book.getPubdate());
+        contentValues.put("tags",book.getTags());
+        contentValues.put("binding",book.getBinding());
+        contentValues.put("price",book.getPrice());
+        contentValues.put("pages",book.getPages());
+        contentValues.put("author_intro",book.getAuthor_intro());
+        contentValues.put("summary",book.getSummary());
+        db.insert("booktb",null,contentValues);
+    }
+
+    //判断isbn号对应的书籍是否在数据库中
+    public static Boolean isBookExist(String isbn){
+        String sql = "select * from booktb where isbn = ?";
+        Cursor cursor = db.rawQuery(sql,new String[]{isbn});
+        cursor.moveToFirst();
+        return !cursor.isAfterLast();
     }
 }

@@ -90,6 +90,7 @@ public class ISBNApiUtil {
             if(status.equals("请求成功")){
                 JSONObject bookInfo = new JSONObject(result.getString("data"));
                 book.setId(bookInfo.getString("id"));
+                book.setIsbn10(bookInfo.getString("id"));
                 book.setTitle(bookInfo.getString("name"));
                 book.setImage(bookInfo.getString("photoUrl"));
                 book.setAuthor(bookInfo.getString("author"));

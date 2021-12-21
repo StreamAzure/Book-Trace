@@ -24,10 +24,10 @@
             android:name=".activity.FreeTalkTopicActivity"
             android:exported="false" />
         <activity
-            android:name=".library.ShowBookDetailActivity"
+            android:name=".activity.LibraryBookDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".library.ShowBookOverviewActivity"
+            android:name=".activity.LibraryBookOverviewActivity"
             android:exported="false"
             android:label="@string/title_activity_show_book_overview"
             android:theme="@style/Theme.BookTrace.NoActionBar" />

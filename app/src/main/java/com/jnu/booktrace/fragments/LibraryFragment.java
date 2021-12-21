@@ -2,20 +2,17 @@ package com.jnu.booktrace.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
+import com.jnu.booktrace.activity.LibraryBookOverviewActivity;
 import com.jnu.booktrace.bean.Book;
-import com.jnu.booktrace.library.ShowBookOverviewActivity;
 import com.jnu.booktrace.utils.ISBNApiUtil;
 
 public class LibraryFragment extends Fragment {
@@ -48,7 +45,7 @@ public class LibraryFragment extends Fragment {
         btnBookShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ShowBookOverviewActivity.class);
+                Intent intent = new Intent(getActivity(), LibraryBookOverviewActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,24 +58,5 @@ public class LibraryFragment extends Fragment {
         return rootView;
     }
 
-
-    public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return null;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return 0;
-        }
-    }
 
 }
