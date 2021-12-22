@@ -1,18 +1,11 @@
 package com.jnu.booktrace.activity;
 
-import static com.jnu.booktrace.database.DBManager.insertBooktb;
+import static com.jnu.booktrace.database.DBManager.QueryBook;
 import static com.jnu.booktrace.database.DBManager.isBookExist;
-import static java.lang.Thread.sleep;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.adapter.BookAdapter;
 import com.jnu.booktrace.bean.Book;
-import com.jnu.booktrace.utils.ISBNApiUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,18 +28,26 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_book_overview);
 
         initData();
-        //initRecyclerView();
+        initRecyclerView();
     }
 
     private void initData() {
         mBookList = new ArrayList<>();
-        ISBNApiUtil isbnApiUtil = new ISBNApiUtil();
-        Book book1 = new Book();
-        Book book2 = new Book();
-        Book book3 = new Book();
-        Log.e("bookExist", isBookExist("9787020024759")+" 9787020024759");
-        Log.e("bookExist", isBookExist("9787040195835")+" 9787040195835");
-        Log.e("bookExist", isBookExist("9787505352377")+" 9787505352377");
+        if(isBookExist("9787020024759")) {
+            Book book = QueryBook("9787020024759");
+            mBookList.add(book);
+        }
+        if(isBookExist("9787040195835")){
+            Book book = QueryBook("9787040195835");
+            mBookList.add(book);
+        }
+        if(isBookExist("9787505352377")){
+            Book book = QueryBook("9787505352377");
+            mBookList.add(book);
+        }
+//        Log.e("bookExist", isBookExist("9787020024759")+" 9787020024759");
+//        Log.e("bookExist", isBookExist("9787040195835")+" 9787040195835");
+//        Log.e("bookExist", isBookExist("9787505352377")+" 9787505352377");
 //        isbnApiUtil.getBookFromISBN(book1, "9787020024759");
 //        isbnApiUtil.getBookFromISBN(book2,"9787040195835");
 //        isbnApiUtil.getBookFromISBN(book3,"9787505352377");
