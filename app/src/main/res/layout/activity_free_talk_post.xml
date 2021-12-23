@@ -5,58 +5,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.FreeTalkPostActivity">
-    <com.google.android.material.appbar.AppBarLayout
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:id="@+id/layout_activity_post_appbar"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <!--标题栏-->
-        <androidx.appcompat.widget.Toolbar
+        android:layout_height="0dp"
+        android:id="@+id/layout_coordinator"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/layout_activity_post_reply_edit">
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </androidx.appcompat.widget.Toolbar>
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <!--吸顶部分-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_activity_post_reply_info"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:background="@color/white">
-
-        <TextView
-            android:id="@+id/tv_activity_post_reply_hint"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="全部回复"/>
+            android:id="@+id/layout_activity_post_appbar">
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        <!--回复数量-->
-        <TextView
-            android:id="@+id/tv_activity_post_reply_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="共10条"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <!--楼主内容-->
+                <include layout="@layout/item_reply_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="56dp"
+                    android:layout_gravity="bottom"
+                    android:id="@+id/layout_activity_reply_head" />
+
+                <!--顶部标题栏-->
+                <androidx.appcompat.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_gravity="top"
+                    android:background="@color/white"
+                    app:layout_collapseMode="pin">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我是toolbar" />
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+            <!--吸顶部分-->
+            <LinearLayout
+                android:id="@+id/layout_activity_post_reply_info"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toBottomOf="@id/layout_activity_reply_head"
+                android:background="@color/white">
+
+                <TextView
+                    android:id="@+id/tv_activity_post_reply_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:text="全部回复"/>
+
+                <!--回复数量-->
+                <TextView
+                    android:id="@+id/tv_activity_post_reply_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:gravity="end"
+                    android:text="共 10 条"/>
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <!--回复列表-->
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!--底部发表回复-->
     <LinearLayout
         android:id="@+id/layout_activity_post_reply_edit"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="45dp"
         android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/layout_coordinator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -68,9 +103,9 @@
             android:layout_width="0dp"
 
             />
-        <!--点赞按钮-->
+        <!--发送按钮-->
         <Button
-            android:id="@+id/btn_activity_post_like"
+            android:id="@+id/btn_activity_post_send"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>

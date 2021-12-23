@@ -29,7 +29,7 @@ public class FreeTalkPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_free_talk_post);
 
-        replyList = new ArrayList<>();
+        initData();
 
         recyclerView = findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
@@ -37,30 +37,19 @@ public class FreeTalkPostActivity extends AppCompatActivity {
         //设置RecyclerView内容
         adapter = new ReplyAdapter(this, replyList);
         recyclerView.setAdapter(adapter);
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (mCurrentPosition != layoutManager.findFirstVisibleItemPosition()) {
-                    mCurrentPosition = layoutManager.findFirstVisibleItemPosition();
-                    //第3个开始   这个就是你需要从第几个开始悬浮
-                    if(mCurrentPosition<1){
-                        //这个是在recyclerview同级别的悬浮
-                        layoutManager.get.setVisibility(View.GONE);
-                    }else if(mCurrentPosition>=1){
-                        mBinding.tabIndex.setVisibility(View.VISIBLE);
-                        //这个是将同级别的悬浮  放置在顶部的距离  距离顶部多少dp  sumHeight我已经计算好了
-                        mBinding.tabIndex.setTop(56);
-                    }
-                }
-            }
-        });
+    }
+    private void initData(){
+        replyList = new ArrayList<>();
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
     }
 
 }

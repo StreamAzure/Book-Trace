@@ -7,6 +7,14 @@ public class Reply {
     private String date;
     private int likeCount;
 
+    public Reply(int avatar,String username,String content,String date){
+        this.avatar = avatar;
+        this.username = username;
+        this.content = content;
+        this.date = date;
+        this.likeCount = 0;
+    }
+
     public int getAvatar() {
         return avatar;
     }

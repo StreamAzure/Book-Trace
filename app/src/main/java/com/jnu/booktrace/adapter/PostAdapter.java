@@ -73,7 +73,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
-            rootView = itemView.findViewById(R.id.root_view);
+            rootView = itemView.findViewById(R.id.item_post_root_view);
             ivAvatar = itemView.findViewById(R.id.iv_item_post_avatar);
             tvUsername = itemView.findViewById(R.id.tv_item_post_username);
             tvContent = itemView.findViewById(R.id.tv_item_post_content);
