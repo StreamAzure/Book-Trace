@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.activity.LibraryBookOverviewActivity;
 import com.jnu.booktrace.bean.Book;
@@ -19,6 +20,7 @@ public class LibraryFragment extends Fragment {
 
     private Button button;
     private EditText editText;
+    private FloatingActionButton floatingActionButton;
 
     public LibraryFragment() {}
     public static LibraryFragment newInstance() {
@@ -37,6 +39,13 @@ public class LibraryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_library, container, false);
+        floatingActionButton = rootView.findViewById(R.id.fab_button);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO:对话框
+            }
+        });
         button = rootView.findViewById(R.id.btn);
         Button btnBookShow = rootView.findViewById(R.id.toBookShowActivity);
         editText = rootView.findViewById(R.id.et);

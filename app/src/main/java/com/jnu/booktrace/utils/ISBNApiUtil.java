@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.jnu.booktrace.bean.Book;
+import com.jnu.booktrace.database.DBManager;
 
 import org.json.JSONObject;
 
@@ -34,14 +35,14 @@ public class ISBNApiUtil {
                     Message message = new Message();
                     String ISBNRequest = "https://api.jike.xyz/situ/book/isbn/"+ISBN+"?apikey="+apikey;
 
-                    Log.e("MYTAG", ISBNRequest);
+//                    Log.e("MYTAG", ISBNRequest);
                     String resultJson = download(ISBNRequest);
-                    Log.e("MYTAG", resultJson);
+//                    Log.e("MYTAG", resultJson);
 
                     //不要发送Message，一收到响应立即解析并赋值，否则来不及赋值，主线程那边发现NULL会报错！
                     if(parsonJson(resultJson, book)){
-                        Log.e("MYTAG",book.getTitle());
-                        Log.e("MYTAG",book.getImage());
+//                        Log.e("MYTAG",book.getTitle());
+//                        Log.e("MYTAG",book.getImage());
                     }
 
                 }catch (Exception e) {
@@ -49,7 +50,17 @@ public class ISBNApiUtil {
                 }
             }
         };
-        new Thread(runnable).start();//线程启动读取网络数据
+        Thread thread = new Thread(runnable);//线程启动读取网络数据
+        thread.start();
+        while(true) {
+            try {
+                thread.join();
+                break;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        new DBManager().insertBooktb(book);
         return book;
     }
 

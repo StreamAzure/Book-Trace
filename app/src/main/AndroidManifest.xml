@@ -21,6 +21,9 @@
         android:theme="@style/Theme.BookTrace.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.FreeTalkPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.FreeTalkTopicActivity"
             android:exported="false" />
         <activity

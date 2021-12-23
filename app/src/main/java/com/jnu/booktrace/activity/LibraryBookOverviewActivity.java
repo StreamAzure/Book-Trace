@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.TagInfo;
+import com.jnu.booktrace.utils.ISBNApiUtil;
 import com.jnu.booktrace.utils.ImageUtil;
 
 import java.util.ArrayList;
@@ -44,36 +45,16 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
     }
 
     private void initData() {
+        //预先加载三本书，方便调试
+        String[] isbn={"9787020024759","9787505352377","9787040195835"};
         mBookList = new ArrayList<>();
-        if(isBookExist("9787020024759")) {
-            Book book = QueryBook("9787020024759");
-            mBookList.add(book);
+        for(int i = 0; i < isbn.length; i++){
+            Book book = new Book();
+            if(!isBookExist(isbn[i])){
+                new ISBNApiUtil().getBookFromISBN(book, isbn[i]);
+            }
+            mBookList.add(QueryBook(isbn[i]));
         }
-        if(isBookExist("9787040195835")){
-            Book book = QueryBook("9787040195835");
-            mBookList.add(book);
-        }
-        if(isBookExist("9787505352377")){
-            Book book = QueryBook("9787505352377");
-            mBookList.add(book);
-        }
-//        Log.e("bookExist", isBookExist("9787020024759")+" 9787020024759");
-//        Log.e("bookExist", isBookExist("9787040195835")+" 9787040195835");
-//        Log.e("bookExist", isBookExist("9787505352377")+" 9787505352377");
-//        isbnApiUtil.getBookFromISBN(book1, "9787020024759");
-//        isbnApiUtil.getBookFromISBN(book2,"9787040195835");
-//        isbnApiUtil.getBookFromISBN(book3,"9787505352377");
-//        try {
-//            sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        insertBooktb(book1);
-//        insertBooktb(book2);
-//        insertBooktb(book3);
-//        mBookList.add(book1);
-//        mBookList.add(book2);
-//        mBookList.add(book3);
     }
 
     private void initRecyclerView(){
