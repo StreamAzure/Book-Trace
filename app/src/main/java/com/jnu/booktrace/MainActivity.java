@@ -10,9 +10,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -33,11 +35,17 @@ public class MainActivity extends AppCompatActivity {
     private FreeTalkFragment freeTalkFragment;
     private PersonFragment personFragment;
 
+    private boolean isExit = false;
+    private Intent intent;
+    private String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initDB(this);//初始化数据库
+        intent = getIntent();
+        name = intent.getStringExtra("name");
         initFragment(); //将底部导航栏各按钮与对应Fragment绑定
         myRequestPermission(); //权限请求
     }
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(item.getItemId()==R.id.item_bottom_person){
                     if(personFragment == null){
-                        personFragment = new PersonFragment();
+                        personFragment = new PersonFragment(name);
                     }
                     setFragment(personFragment);
                 }
@@ -95,5 +103,17 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.fragment_container,fragment);
         fragmentTransaction.commit();
     }
+//    //点击返回键直接退出程序
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        if (!isExit) {
+//            isExit = true;
+//            Toast.makeText(this, "再按一次后退键退出程序", Toast.LENGTH_SHORT).show();
+//
+//        } else {
+//            this.finish();
+//        }
+//    }
 
 }

@@ -1,8 +1,14 @@
 package com.jnu.booktrace.Login;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,14 +17,21 @@ import android.widget.Toast;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.database.DBManager;
+import com.jnu.booktrace.database.DatabaseManager;
 
-/*
-* 作用：此activity用于实现BookTrace的注册功能
-* 功能：实现注册逻辑，将用户添加到数据库中
-**/
+import java.sql.SQLException;
+import java.util.concurrent.CountDownLatch;
+
+/**
+ * 作用：此activity用于实现BookTrace的注册功能
+ * 功能：实现注册逻辑，将用户添加到数据库中
+ **/
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+    private static int USER_EXIT=1, USER_NOEXIT=0;
     private EditText register_name,register_password,register_password2;
     private Button register_confirm, register_cancel;
+    private Handler handler;
+    private Boolean userExist=true, JudgeFinish=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         //设置按钮监听事件
         register_confirm.setOnClickListener(this);
         register_cancel.setOnClickListener(this);
+
     }
 
     /**初始化控件*/
@@ -57,19 +71,66 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         name = register_name.getText().toString();
         password = register_password.getText().toString();
         password2 = register_password2.getText().toString();
-        if(name != null && password!= null && password2!= null){
+        if(!name.equals("") && !password.equals("") && !password2.equals("")){
             if(!password.equals(password2)){//判断两次输入的密码是否一致
                 Toast.makeText(RegisterActivity.this,"两次输入的密码不一致，请重新输入",
                         Toast.LENGTH_SHORT).show();
             } else{//判断现在添加的用户是否以及存在，不存在则添加
-                if(DBManager.JudgePersonExist(name)){
-                    Toast.makeText(RegisterActivity.this,"输入的用户已存在，请重新输入",
-                            Toast.LENGTH_SHORT).show();
-                }else{
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Boolean r  = DatabaseManager.judgePersonExist(name);
+                        Message message = new Message();
+                        if(r){
+                            message.what = USER_EXIT;
+                            handler.sendMessage(message);
+                        }else{
+                            message.what = USER_NOEXIT;
+                            handler.sendMessage(message);
+                        }
+                        JudgeFinish = true;
+                    }
+                });
+                thread.start();
+                handler = new Handler(Looper.getMainLooper()){
+                    @Override
+                    public void handleMessage(@NonNull Message msg) {
+                        super.handleMessage(msg);
+                        if(msg.what==USER_EXIT) {
+                            userExist = true;
+                            Toast.makeText(RegisterActivity.this, "注册的用户已存在，请重新输入",
+                                    Toast.LENGTH_SHORT).show();
+                            register_name.setText("");
+                            register_password.setText("");
+                            register_password2.setText("");
+                        }else if(msg.what==USER_NOEXIT){
+                            userExist = false;
+                        }
+                    }
+                };
+                while (true){
+                    try {
+                        thread.join();
+                        break;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if(!userExist){
                     person.setName(name);
                     person.setPassword(password);
-                    DBManager.insertPersontb(person);
+                    new Thread(()->{
+                        DatabaseManager.insertPersontb(person);
+                    }).start();
+                    //DBManager.insertPersontb(person);
+                    Toast.makeText(RegisterActivity.this,"注册成功",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(this,LoginActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
+
+
             }
         }else {
             Toast.makeText(RegisterActivity.this,"请输入完整的信息",Toast.LENGTH_SHORT).show();
