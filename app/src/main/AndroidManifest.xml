@@ -21,6 +21,9 @@
         android:theme="@style/Theme.BookTrace.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".person.PersonInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.FreeTalkTopicActivity"
             android:exported="false" />
         <activity
@@ -35,7 +38,7 @@
             android:name=".Login.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".Login.LoginActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".ScanActivity"
@@ -43,7 +46,7 @@
             android:label="@string/title_activity_scan"
             android:theme="@style/Theme.BookTrace.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
