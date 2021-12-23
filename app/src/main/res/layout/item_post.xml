@@ -2,65 +2,78 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/root_view"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
 
-    <!--用户头像-->
     <ImageView
         android:id="@+id/iv_item_post_avatar"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/touxiang"
+        android:background="@drawable/touxiang_bg"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
-    <!--用户昵称-->
     <TextView
         android:id="@+id/tv_item_post_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="StreamAzure"
+        android:layout_marginLeft="5dp"
         app:layout_constraintLeft_toRightOf="@id/iv_item_post_avatar"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!--主题帖内容-->
     <TextView
         android:id="@+id/tv_item_post_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:text="我爱读书!"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"
         app:layout_constraintTop_toBottomOf="@id/iv_item_post_avatar"/>
 
-    <!--主题帖关联的话题-->
     <Button
         android:id="@+id/btn_item_post_relative_topic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="20dp"
+        android:background="@drawable/huati_bg"
+        android:text="话题描述"
+        android:drawableLeft="@drawable/huati"
+        android:textColor="@color/white"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toTopOf="@id/tv_item_post_date"
         app:layout_constraintTop_toBottomOf="@id/tv_item_post_content"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
-    <!--主题帖发表日期-->
     <TextView
         android:id="@+id/tv_item_post_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text = "2021-12-21"
+        android:layout_marginTop="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_item_post_relative_topic"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <!--回复数，点击也可进入回帖页面-->
     <Button
         android:id="@+id/btn_item_post_reply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/dianzan_pinglun"
+        android:drawableLeft="@mipmap/dianzan"
+        android:text="1"
+        android:layout_marginRight="10dp"
         app:layout_constraintRight_toLeftOf="@id/btn_item_post_like"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <!--赞同数-->
     <Button
         android:id="@+id/btn_item_post_like"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:text="1"
+        android:background="@drawable/dianzan_pinglun"
+        android:drawableLeft="@mipmap/pinglun"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
