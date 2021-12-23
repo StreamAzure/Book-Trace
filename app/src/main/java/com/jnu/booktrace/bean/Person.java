@@ -1,24 +1,28 @@
 package com.jnu.booktrace.bean;
 
 /*
-* @作用：用户个人信息类
-* @功能：保存用户的个人信息
-**/
+ * 作用：用户个人信息类
+ * 功能：保存用户的个人信息
+ **/
 public class Person {
     private int id;
     private String name;
     private String password;
     private String nickName;
     private String description;
+    private String avatar;
 
-    public Person() { }
+    public Person() {
 
-    public Person(int id, String name, String password, String nickName, String description) {
+    }
+
+    public Person(int id, String name, String password, String nickName, String description,String avatar) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.nickName = nickName;
         this.description = description;
+        this.avatar = avatar;
     }
 
     public int getId() {
@@ -59,5 +63,13 @@ public class Person {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
