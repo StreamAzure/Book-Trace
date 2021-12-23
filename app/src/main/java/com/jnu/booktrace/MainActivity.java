@@ -1,5 +1,7 @@
 package com.jnu.booktrace;
 
+import static com.jnu.booktrace.database.DBManager.initDB;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initDB(this);//初始化数据库
         initFragment(); //将底部导航栏各按钮与对应Fragment绑定
-        myRequestPermission();
+        myRequestPermission(); //权限请求
     }
 
     private void myRequestPermission(){

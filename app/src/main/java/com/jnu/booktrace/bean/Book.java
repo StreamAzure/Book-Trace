@@ -156,6 +156,7 @@ public class Book {
     }
 
     public Bitmap getImage_bitmap() {
+
         return image_bitmap;
     }
 
