@@ -25,7 +25,7 @@ import com.jnu.booktrace.person.PersonInfoActivity;
 public class PersonFragment extends Fragment implements View.OnClickListener {
     private TextView person_tv_name, person_tv_description;
     private ImageView person_iv_avatar;
-    private ImageButton person_bt_person, person_bt_drift,person_bt_topic,person_bt_collect;
+    private ImageView person_bt_person, person_bt_drift,person_bt_topic,person_bt_collect;
 
     @Override
     public void onResume() {

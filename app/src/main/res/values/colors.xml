@@ -22,4 +22,14 @@
     <color name="gray_7D7D7D">#7D7D7D</color>
     <color name="gray_8a8a8a">#8a8a8a</color>
     <color name="icon_checked">#4b5ba7</color>
+
+    <color name="font_color">#0b182B</color>
+    <color name="secondary_font_color">#9DA6B7</color>
+
+    <color name="topic_blue">#6885B1</color>
+    <color name="topic_green">#A7CFD1</color>
+    <color name="topic_grey">#C4C4BC</color>
+    <color name="topic_brown">#C9BAA3</color>
+
+    <color name="book_detail_review_background">#F5F5F5</color>
 </resources>

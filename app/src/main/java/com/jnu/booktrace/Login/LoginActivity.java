@@ -25,6 +25,9 @@ import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
 import com.jnu.booktrace.imagehandle.ImageHandle;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -120,10 +123,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.login_cancel:
-                String imageStr = ImageHandle.getImageStr("star.png");
-                Log.i(TAG, imageStr);
-                boolean generateImage = ImageHandle.generateImage(imageStr, "1.jpg");
-                System.out.println(generateImage);
+                //String imageStr = ImageHandle.getImageStr("star.png");
+                String imageStr = null;
+                try {
+                    imageStr = readFile("star.png");
+                    Log.e("Login", imageStr);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.e("Login", imageStr);
+//                boolean generateImage = ImageHandle.generateImage(imageStr, "1.jpg");
+//                System.out.println(generateImage);
                 break;
             case R.id.login_register:
                 Intent intent = new Intent(this, RegisterActivity.class);
@@ -132,5 +142,34 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+
+    //读数据
+    public String readFile(String fileName) throws IOException {
+        String res = "";//有问题，没有更新res的地方，始终为空
+        try {
+            FileInputStream fin = openFileInput(fileName);
+            int length = fin.available();
+            byte[] buffer = new byte[length];
+            fin.read(buffer);
+            fin.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+
+    //写数据
+    public void writeFile(String fileName,String writestr) throws IOException{
+        try{
+            FileOutputStream fout =openFileOutput(fileName, MODE_PRIVATE);
+            byte [] bytes = writestr.getBytes();
+            fout.write(bytes);
+            fout.close();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
 
