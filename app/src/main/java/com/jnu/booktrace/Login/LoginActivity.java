@@ -23,6 +23,7 @@ import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
+import com.jnu.booktrace.imagehandle.ImageHandle;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -119,6 +120,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.login_cancel:
+                String imageStr = ImageHandle.getImageStr("star.png");
+                Log.i(TAG, imageStr);
+                boolean generateImage = ImageHandle.generateImage(imageStr, "1.jpg");
+                System.out.println(generateImage);
                 break;
             case R.id.login_register:
                 Intent intent = new Intent(this, RegisterActivity.class);

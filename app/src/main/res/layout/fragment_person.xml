@@ -47,10 +47,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:orientation="vertical">
-                <ImageButton
+                <ImageView
                     android:id="@+id/person_bt_person"
                     android:layout_width="match_parent"
-                    android:layout_height="105dp"/>
+                    android:layout_height="105dp"
+                    android:src="@mipmap/person_center"
+                    android:onClick="onClick"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,10 +64,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:orientation="vertical">
-                <ImageButton
+                <ImageView
                     android:id="@+id/person_bt_drift"
                     android:layout_width="match_parent"
-                    android:layout_height="105dp"/>
+                    android:src="@mipmap/drift"
+                    android:layout_height="105dp"
+                    android:onClick="onClick"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -77,10 +81,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:orientation="vertical">
-                <ImageButton
+                <ImageView
                     android:id="@+id/person_bt_topic"
                     android:layout_width="match_parent"
-                    android:layout_height="105dp"/>
+                    android:src="@mipmap/topic"
+                    android:layout_height="105dp"
+                    android:onClick="onClick"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -92,10 +98,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:orientation="vertical">
-                <ImageButton
+                <ImageView
+                    android:src="@mipmap/connect"
                     android:id="@+id/person_bt_collect"
                     android:layout_width="match_parent"
-                    android:layout_height="105dp"/>
+                    android:layout_height="105dp"
+                    android:onClick="onClick"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -33,8 +33,6 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         setTopName();
     }
 
-
-
     public PersonFragment() {}
 
     @Override
