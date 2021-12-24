@@ -15,8 +15,11 @@
     <color name="scan_laser">#cc0000</color>
     <color name="scan_dot">#ff6600</color>
     <color name="scan_result_view">#b0000000</color>
-    <color name="scan_result_dots">#c099cc00</color>
+    <color name="green_1">#c099cc00</color>
 
-
+    <color name="gray">#f3f3f3</color>
+    <color name="gray_bfbfbf">#bfbfbf</color>
+    <color name="gray_7D7D7D">#7D7D7D</color>
+    <color name="gray_8a8a8a">#8a8a8a</color>
     <color name="icon_checked">#4b5ba7</color>
 </resources>
