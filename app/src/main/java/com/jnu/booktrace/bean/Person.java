@@ -15,7 +15,11 @@ public class Person {
     private String avatar;
 
     public Person() {
+        setNickName("");
         setGender("未知");
+        setBirth("");
+        setDescription("");
+        setAvatar("");
     }
 
     public Person(int id, String name, String password, String nickName, String description,String avatar) {
