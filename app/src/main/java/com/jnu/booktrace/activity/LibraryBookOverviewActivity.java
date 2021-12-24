@@ -3,12 +3,10 @@ package com.jnu.booktrace.activity;
 import static com.jnu.booktrace.database.DBManager.QueryBook;
 import static com.jnu.booktrace.database.DBManager.isBookExist;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +36,7 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_book_overview);
+        setContentView(R.layout.activity_library_book_overview);
 
         initData();
         initRecyclerView();
@@ -117,6 +115,14 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
                     }
                 });
             }
+
+            bookHolder.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, LibraryBookDetailActivity.class);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
@@ -125,10 +131,12 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
         }
 
         class BookHolder extends RecyclerView.ViewHolder{
+            View rootView;
             ImageView ivImage;
             TextView tvTitle,tvAuthor,tvAbstract,tvBookShelf;
             public BookHolder(@NonNull View itemView) {
                 super(itemView);
+                rootView = itemView.findViewById(R.id.item_book_root_view);
                 ivImage = itemView.findViewById(R.id.iv_item_book_image);
                 tvTitle = itemView.findViewById(R.id.tv_item_book_title);
                 tvAuthor = itemView.findViewById(R.id.tv_item_book_author);

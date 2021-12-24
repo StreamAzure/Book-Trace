@@ -42,11 +42,13 @@
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_free_talk.xml" value="0.17447916666666666" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_library.xml" value="0.17447916666666666" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/fragment_person.xml" value="0.17447916666666666" />
-        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/item_book_overview_layout.xml" value="0.4" />
+        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/item_book_overview_layout.xml" value="0.1" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/item_post.xml" value="0.3223958333333333" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/item_reply.xml" value="0.3380208333333333" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/item_reply_head.xml" value="0.4" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/item_topic.xml" value="0.536" />
+        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/part_book_detail_head.xml" value="0.21875" />
+        <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/part_book_detail_review.xml" value="0.21875" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/layout/title_top_white.xml" value="0.20572916666666666" />
         <entry key="..\:/Course_SoftwareEngineering/BookTrace/app/src/main/res/menu/menu_bottom_navigation_view.xml" value="0.17447916666666666" />
         <entry key="..\:/Users/31818/AndroidStudioProjects/BookTrace/app/src/main/res/drawable/underline.xml" value="0.10092592592592593" />

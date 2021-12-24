@@ -40,16 +40,16 @@ public class FreeTalkPostActivity extends AppCompatActivity {
     }
     private void initData(){
         replyList = new ArrayList<>();
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
-        replyList.add(new Reply(R.drawable.ic_launcher_background,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
+        replyList.add(new Reply(R.drawable.touxiang,"电饭煲","测试回复","2021-10-01"));
     }
 
 }
