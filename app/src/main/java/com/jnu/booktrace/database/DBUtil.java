@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 public class DBUtil {
     //url  127.0.0.1改为数据库所在的电脑或服务器ip地址  pps改为自己数据库的名字
-    private static final String url = "jdbc:mysql://121.196.109.226:3306/BOOKTRACE?autoReconnect=true";
+    private static final String url = "jdbc:mysql://121.196.109.226:3306/BOOKTRACE?autoReconnect=true&useUnicode=true&characterEncoding=utf8";
     //数据库用户名
     private static final String user = "root";
     //数据库密码

@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.database.DatabaseManager;
 import com.jnu.booktrace.fragments.DriftFragment;
 import com.jnu.booktrace.fragments.FreeTalkFragment;
 import com.jnu.booktrace.fragments.LibraryFragment;
@@ -34,10 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private DriftFragment driftFragment;
     private FreeTalkFragment freeTalkFragment;
     private PersonFragment personFragment;
-
-    private boolean isExit = false;
     private Intent intent;
     private String name;
+    public static Person person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,21 @@ public class MainActivity extends AppCompatActivity {
         initDB(this);//初始化数据库
         intent = getIntent();
         name = intent.getStringExtra("name");
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                person = DatabaseManager.getPersonFromName(name);
+            }
+        });
+        thread.start();
+        while(true){
+            try {
+                thread.join();
+                break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         initFragment(); //将底部导航栏各按钮与对应Fragment绑定
         myRequestPermission(); //权限请求
     }
@@ -88,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(item.getItemId()==R.id.item_bottom_person){
                     if(personFragment == null){
-                        personFragment = new PersonFragment(name);
+                        personFragment = new PersonFragment();
                     }
                     setFragment(personFragment);
                 }

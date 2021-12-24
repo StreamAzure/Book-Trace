@@ -47,16 +47,17 @@ public class DatabaseManager {
         try {
             connection = DBUtil.getConnection();   //进行数据库连接
             statement = connection.createStatement();
-            sql = "insert into persontb (name,password, nickname,description,avatar) values (?,?,?,?,?)";
+            sql = "insert into persontb (name,password, nickname,gender,birth,description,avatar) values (?,?,?,?,?,?,?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,person.getName());
             preparedStatement.setString(2,person.getPassword());
             preparedStatement.setString(3,person.getNickName());
-            preparedStatement.setString(4,person.getDescription());
-            preparedStatement.setString(5,person.getAvatar());
+            preparedStatement.setString(4,person.getGender());
+            preparedStatement.setString(5,person.getBirth());
+            preparedStatement.setString(6,person.getDescription());
+            preparedStatement.setString(7,person.getAvatar());
             preparedStatement.executeUpdate();
             connection.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -130,6 +131,8 @@ public class DatabaseManager {
                 person.setName(name);
                 person.setPassword(result.getString("password"));
                 person.setNickName(result.getString("nickname"));
+                person.setGender(result.getString("gender"));
+                person.setBirth(result.getString("birth"));
                 person.setDescription(result.getString("description"));
                 person.setAvatar(result.getString("avatar"));
             }
@@ -139,6 +142,26 @@ public class DatabaseManager {
         return person;
     }
 
+    public static void updatePersontb(Person person){
+        try {
+            connection = DBUtil.getConnection();   //进行数据库连接
+            sql = "update persontb set password = ? , nickname = ?, gender = ? ,birth = ?, description = ?, avatar = ? where id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,person.getPassword());
+            preparedStatement.setString(2, person.getNickName());
+            preparedStatement.setString(3,person.getGender());
+            preparedStatement.setString(4,person.getBirth());
+            preparedStatement.setString(5,person.getDescription());
+            preparedStatement.setString(6,person.getAvatar());
+            preparedStatement.setInt(7,person.getId());
+            preparedStatement.executeUpdate();
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+    }
+
     /**
      * 将书本传入数据库
      * @param book-书本
@@ -146,7 +169,6 @@ public class DatabaseManager {
     public static void insertBooktb(Book book){
         try {
             connection = DBUtil.getConnection();   //进行数据库连接
-            statement = connection.createStatement();
             sql = "insert into bootb (isbn,title, image,author,translator,publisher,pubdate,tags,binding,price,pages,author_intro,summary) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,book.getIsbn10());
