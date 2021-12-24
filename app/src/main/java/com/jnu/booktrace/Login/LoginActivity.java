@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.jnu.booktrace.MainActivity;
@@ -38,6 +39,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText nameEt, passwordEt;
     private Button confirmBt, cancelBt;
     private Boolean exist = false,finish = false;
+    private LinearLayout processBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,17 +58,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         passwordEt = findViewById(R.id.login_pwd);
         confirmBt = findViewById(R.id.login_confirm);
         cancelBt = findViewById(R.id.login_cancel);
+        processBar = findViewById(R.id.login_processBar);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.login_confirm:
-                ProgressDialog progressDialog = new ProgressDialog(this);
-                //progressDialog.setTitle("登录状态");
-                progressDialog.setMessage("登录中");
-                progressDialog.setCancelable(false);
-                progressDialog.show();
                 String name = nameEt.getText().toString();
                 String password = passwordEt.getText().toString();
                 if(name.equals("")){//登录成功
@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }else if(password.equals("")){ //密码为空
                     Toast.makeText(LoginActivity.this,"密码不能为空！",Toast.LENGTH_SHORT).show();
                 }else{
+                    processBar.setVisibility(View.VISIBLE);
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -81,13 +82,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             if(judge){
                                 message.what = USER_EXiST;
                                 Log.i(TAG, name+"用户存在");
-
                                 exist = true;
                             }
                             finish = true;
                         }
                     });
                     thread.start();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     while (true){
                         try {
                             thread.join();
@@ -96,32 +101,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             e.printStackTrace();
                         }
                     }
-                    if(finish){
 
+                    if(finish){
                         if(exist){
                             Intent intent = new Intent(this, MainActivity.class);
                             intent.putExtra("name",name);
                             startActivity(intent);
                             finish();
                         }else{
+                            processBar.setVisibility(View.GONE);
                             Toast.makeText(LoginActivity.this,"密码错误或用户不存在！",Toast.LENGTH_SHORT).show();
+                            nameEt.setText("");
+                            passwordEt.setText("");
                         }
                     }
 
                 }
-
                 break;
             case R.id.login_cancel:
-                new Thread(()->{
-                    try {
-                        String test = DatabaseManager.test();
-
-                    } catch (SQLException throwables) {
-                        throwables.printStackTrace();
-                    }
-                }).start();
-
-//                finish();
                 break;
             case R.id.login_register:
                 Intent intent = new Intent(this, RegisterActivity.class);

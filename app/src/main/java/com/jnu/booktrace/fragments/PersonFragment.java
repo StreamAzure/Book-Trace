@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.database.DBManager;
@@ -22,16 +23,19 @@ import com.jnu.booktrace.person.PersonInfoActivity;
 
 
 public class PersonFragment extends Fragment implements View.OnClickListener {
-    private Person person;
-    private String name;
     private TextView person_tv_name, person_tv_description;
     private ImageView person_iv_avatar;
     private ImageButton person_bt_person, person_bt_drift,person_bt_topic,person_bt_collect;
 
-
-    public PersonFragment(String name) {
-        this.name = name;
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTopName();
     }
+
+
+
+    public PersonFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,31 +60,22 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setTopName() {
-        person_tv_name.setText(name);
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                person = DatabaseManager.getPersonFromName(name);
-            }
-        });
-        thread.start();
-        while(true){
-            try {
-                thread.join();
-                break;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if(MainActivity.person.getNickName().equals("")){
+            person_tv_name.setText("未设置昵称");
+        }else{
+            person_tv_name.setText(MainActivity.person.getNickName());
         }
-        String description = person.getDescription();
-        person_tv_description.setText(description);
-        Bitmap bitmap = BitmapFactory.decodeFile(person.getAvatar());
+
+        person_tv_description.setText(MainActivity.person.getDescription());
+        //设置头像
+        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.person.getAvatar());
         person_iv_avatar.setImageBitmap(bitmap);
     }
 
     private void initFrag(View view) {
         person_tv_name = view.findViewById(R.id.person_tv_name);
         person_tv_description =view.findViewById(R.id.person_tv_description);
+        person_tv_description.setText(MainActivity.person.getName());
         person_bt_person = view.findViewById(R.id.person_bt_person);
         person_bt_drift = view.findViewById(R.id.person_bt_drift);
         person_bt_topic = view.findViewById(R.id.person_bt_topic);

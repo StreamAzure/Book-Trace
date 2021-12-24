@@ -26,6 +26,7 @@
             android:textSize="25sp"/>
     </RelativeLayout>
     <RelativeLayout
+        android:padding="10dp"
         android:id="@+id/person_info_rl_avatar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,6 +47,95 @@
 
     </RelativeLayout>
     <RelativeLayout
+        android:padding="10dp"
+        android:id="@+id/person_info_rl_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/person_info_tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="昵称"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"/>
+
+        <EditText
+            android:id="@+id/person_info_tv_nickname2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/person_info_tv_nickname"
+            android:background="@null"
+            android:ellipsize="end"
+            android:hint="编辑昵称"
+            android:lines="1"
+            android:paddingStart="10sp"
+            android:textSize="18sp"
+            tools:ignore="RtlSymmetry"
+            android:inputType="text"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:padding="10dp"
+        android:id="@+id/person_info_rl_gender"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="onClick">
+        <TextView
+            android:id="@+id/person_info_tv_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="性别"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/person_info_tv_gender2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="0dp"
+            android:layout_toEndOf="@id/person_info_tv_gender"
+            android:hint="选择性别"
+            android:paddingStart="10sp"
+            android:textSize="18sp" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:padding="10dp"
+        android:id="@+id/person_info_rl_birth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="onClick">
+        <TextView
+            android:id="@+id/person_info_tv_birth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="生日"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/person_info_tv_birth2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/person_info_tv_birth"
+            android:background="@null"
+            android:hint="选择生日"
+            android:paddingStart="10sp"
+            android:textSize="18sp"
+            tools:ignore="RtlSymmetry" />
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:padding="10dp"
         android:id="@+id/person_info_rl_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,15 +148,36 @@
             android:text="个性签名"
             android:layout_centerVertical="true"
             android:textSize="20sp"/>
-        <EditText
-            android:id="@+id/person_info_ed_description"
+
+        <TextView
+            android:id="@+id/person_info_tv_description2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/person_info_tv_description"
             android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/person_info_tv_description"
+            android:background="@null"
+            android:ellipsize="marquee"
             android:hint="编辑个性签名"
-            android:background="@null"/>
+            android:lines="1"
+            android:maxEms="10"
+            android:paddingStart="10sp"
+            android:textSize="18sp"
+            tools:ignore="RtlSymmetry" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:padding="10dp"
+        android:id="@+id/person_info_rl_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="onClick">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改密码"
+            android:layout_centerVertical="true"
+            android:textSize="20sp"/>
         <ImageView
             android:layout_alignParentEnd="true"
             android:layout_width="wrap_content"

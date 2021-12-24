@@ -21,6 +21,12 @@
         android:theme="@style/Theme.BookTrace.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".person.ChangeAvatarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".person.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".person.PersonInfoActivity"
             android:exported="false" />
         <activity

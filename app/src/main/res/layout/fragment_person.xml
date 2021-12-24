@@ -26,7 +26,6 @@
                     android:id="@+id/person_tv_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="123"
                     android:hint="用户名"
                     android:textSize="20sp"/>
                 <TextView
@@ -104,14 +103,5 @@
                     android:text="收藏"/>
             </LinearLayout>
         </LinearLayout>
-
-
-
-
-
-
     </LinearLayout>
-
-
-
 </FrameLayout>
