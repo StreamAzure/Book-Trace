@@ -196,7 +196,7 @@ public class DatabaseManager {
     }
 
     /**
-     * 根据isbn号查看书籍是否存在数据库中
+     * 根据isbn号查看书籍是否存在远程数据库中
      * @param isbn-书的isbn号
      * @return true-存在 false-不存在
      */
@@ -219,35 +219,65 @@ public class DatabaseManager {
         else return false;
     }
 
+    /**
+     * 判断书籍是否在远程数据库中，若存在，根据isbn号查询书籍信息
+     * @param isbn-书籍ISBN号
+     * @return 返回Book对象（已new）;若数据不存在，Book对象为null
+     */
     public static Book QueryBook(String isbn){
         Book book = new Book();
+        if(isBookExist(isbn)) {
+            try {
+                connection = DBUtil.getConnection();
+                sql = "select * from booktb where isbn = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, isbn);
+                result = preparedStatement.executeQuery();
+                while (result.next()) {
+                    book.setId(result.getString("isbn"));
+                    book.setIsbn10(result.getString("isbn"));
+                    book.setTitle(result.getString("title"));
+                    book.setImage(result.getString("image"));
+                    book.setAuthor(result.getString("author"));
+                    book.setTranslator(result.getString("translator"));
+                    book.setPublisher(result.getString("publisher"));
+                    book.setPubdate(result.getString("pubdate"));
+                    book.setTags(result.getString("tags"));
+                    book.setBinding(result.getString("binging"));
+                    book.setPrice(result.getString("price"));
+                    book.setPages(result.getInt("pages") + "");
+                    book.setAuthor_intro(result.getString("author_intro"));
+                    book.setSummary(result.getString("summary"));
+                }
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return book;
+    }
+
+    /**
+     * 判断远程服务器中是否有该用户的user-book信息
+     * @param username 用户名
+     * @return true-至少有一条；false-一条都没有
+     */
+    public static boolean isUserBookExist(String username){
+        int count = 0;
         try {
             connection = DBUtil.getConnection();
-            sql = "select * from booktb where isbn = ?";
+            sql = "select count(*) from userbooktb where username = ?";
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1,isbn);
+            preparedStatement.setString(1,username);
             result = preparedStatement.executeQuery();
-            while(result.next()){
-                book.setId(result.getString("isbn"));
-                book.setIsbn10(result.getString("isbn"));
-                book.setTitle(result.getString("title"));
-                book.setImage(result.getString("image"));
-                book.setAuthor(result.getString("author"));
-                book.setTranslator(result.getString("translator"));
-                book.setPublisher(result.getString("publisher"));
-                book.setPubdate(result.getString("pubdate"));
-                book.setTags(result.getString("tags"));
-                book.setBinding(result.getString("binging"));
-                book.setPrice(result.getString("price"));
-                book.setPages(result.getInt("pages")+"");
-                book.setAuthor_intro(result.getString("author_intro"));
-                book.setSummary(result.getString("summary"));
+            while (result.next()){
+                count = result.getInt("count(*)");
             }
             connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return book;
+        return count >= 0;
     }
 
     public static List<Drift> GetDrift(){

@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -21,6 +24,7 @@ public class LibraryFragment extends Fragment {
     private Button button;
     private EditText editText;
     private FloatingActionButton floatingActionButton;
+    private Spinner spinner;
 
     public LibraryFragment() {}
     public static LibraryFragment newInstance() {
@@ -66,6 +70,25 @@ public class LibraryFragment extends Fragment {
         });
         return rootView;
     }
+
+    private void initSpinner(View v){
+        spinner = v.findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] spinnerContent = new String[]{"默认","玄幻","同人文"};
+                Toast.makeText(getContext(), "你点击的是:" + spinnerContent[position],
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+
 
 
 }

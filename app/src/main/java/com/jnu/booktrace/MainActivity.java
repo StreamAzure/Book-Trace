@@ -1,6 +1,8 @@
 package com.jnu.booktrace;
 
+import static com.jnu.booktrace.database.DBManager.QueryUserBooks;
 import static com.jnu.booktrace.database.DBManager.initDB;
+import static com.jnu.booktrace.database.DBManager.isUserBookExist;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -50,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 person = DatabaseManager.getPersonFromName(name);
+                //判断本地数据库中表是否为空，为空则与远程同步建表
+                if(!isUserBookExist(name)){
+
+                }
             }
         });
         thread.start();
