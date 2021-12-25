@@ -181,7 +181,7 @@ public class DatabaseManager {
             preparedStatement.setString(8,book.getTags());
             preparedStatement.setString(9,book.getBinding());
             preparedStatement.setString(10,book.getPrice());
-            preparedStatement.setInt(11,book.getPages());
+            preparedStatement.setString(11,book.getPages()+"");
             preparedStatement.setString(12,book.getAuthor_intro());
             preparedStatement.setString(13,book.getSummary());
             preparedStatement.executeUpdate();
@@ -236,7 +236,7 @@ public class DatabaseManager {
                 book.setTags(result.getString("tags"));
                 book.setBinding(result.getString("binging"));
                 book.setPrice(result.getString("price"));
-                book.setPages(result.getInt("pages"));
+                book.setPages(result.getInt("pages")+"");
                 book.setAuthor_intro(result.getString("author_intro"));
                 book.setSummary(result.getString("summary"));
             }

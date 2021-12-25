@@ -54,7 +54,7 @@ public class ISBNApiUtil {
         thread.start();
         while(true) {
             try {
-                thread.join();
+                thread.join(); //必须等待这个线程结束
                 break;
             }catch (Exception e){
                 e.printStackTrace();
@@ -109,7 +109,7 @@ public class ISBNApiUtil {
                 book.setPublisher(bookInfo.getString("publishing"));
                 book.setPubdate(bookInfo.getString("published"));
                 book.setPrice(bookInfo.getString("price"));
-                book.setPages(bookInfo.getInt("pages"));
+                book.setPages(bookInfo.getString("pages"));
                 book.setAuthor_intro(bookInfo.getString("authorIntro"));
                 book.setSummary(bookInfo.getString("description"));
                 book.setBinding(bookInfo.getString("designed"));
@@ -122,43 +122,4 @@ public class ISBNApiUtil {
         return false;
     }
 
-
-    /**
-     * @description 新开一个线程从URL加载到bitmap
-     */
-    public void loadImageFromURL(Book book){
-        URL imgURL = null;
-        try {
-            imgURL = new URL(book.getImage());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        URL finalImgURL = imgURL;
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection connection = (HttpURLConnection) finalImgURL.openConnection();
-                    connection.setDoInput(true);
-                    connection.setConnectTimeout(600);
-                    connection.setUseCaches(false);
-                    connection.connect();
-                    InputStream inputStream = connection.getInputStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    book.setImage_bitmap(bitmap);
-//                    Message message = Message.obtain();//从线程池里获取，避免new太多
-//                    message.what = WHAT_LOAD_IMAGE_OK;
-//                    message.obj = bitmap;
-//                    handler.sendMessage(message);
-                    inputStream.close();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        new Thread(runnable).start();//线程启动读取网络数据
-    }
 }

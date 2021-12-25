@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +45,11 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
 
     private void initData() {
         //预先加载三本书，方便调试
-        String[] isbn={"9787020024759","9787505352377","9787040195835"};
+        String[] isbn={"9787020024759","9787505352377","9787040195835","9787544210966","9787544211765"};
         mBookList = new ArrayList<>();
         for(int i = 0; i < isbn.length; i++){
             Book book = new Book();
-            if(!isBookExist(isbn[i])){
+            if(!isBookExist(isbn[i])){ //如果数据库中没有则请求，请求完了加入到（本地）数据库
                 new ISBNApiUtil().getBookFromISBN(book, isbn[i]);
             }
             mBookList.add(QueryBook(isbn[i]));
@@ -116,10 +117,14 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
                 });
             }
 
+            /**
+             * 书籍项的点击事件，跳转至详情页
+             */
             bookHolder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, LibraryBookDetailActivity.class);
+                    intent.putExtra("book",(Parcelable)book);
                     context.startActivity(intent);
                 }
             });

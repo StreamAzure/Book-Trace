@@ -1,24 +1,71 @@
 package com.jnu.booktrace.bean;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
 
-public class Book {
+import java.io.Serializable;
+import java.lang.reflect.Field;
+
+public class Book implements Parcelable {
     private String id;
     private String isbn10;
-    private String isbn13;
     private String title;
     private String image;
-    private Bitmap image_bitmap;
     private String author;
     private String translator;
     private String publisher;
     private String pubdate;
-    private String tags;
-    private String binding;
     private String price;
-    private int pages;
+    private String pages;
     private String author_intro;
     private String summary;
+    private String binding;
+    private String tags;
+
+    public Book(){
+        Class cls = this.getClass();
+        Field[] fields = cls.getDeclaredFields();
+        for(int i=0;i<13;i++){
+            Field f = fields[i];
+            f.setAccessible(true);
+            try {
+                Log.e("book",f.getName()+" "+f.get(this));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected Book(Parcel in) {
+        id = in.readString();
+        isbn10 = in.readString();
+        title = in.readString();
+        image = in.readString();
+        author = in.readString();
+        translator = in.readString();
+        publisher = in.readString();
+        pubdate = in.readString();
+        price = in.readString();
+        pages = in.readString();
+        author_intro = in.readString();
+        summary = in.readString();
+        binding = in.readString();
+    }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -32,20 +79,12 @@ public class Book {
         return isbn10;
     }
 
-    public String getIsbn13() {
-        return isbn13;
-    }
-
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setIsbn13(String isbn13) {
-        this.isbn13 = isbn13;
     }
 
     public void setIsbn10(String isbn10) {
@@ -120,7 +159,7 @@ public class Book {
         this.price = price;
     }
 
-    public int getPages() {
+    public String getPages() {
         return pages;
     }
 
@@ -128,7 +167,7 @@ public class Book {
      *
      * @param pages 页数
      */
-    public void setPages(int pages) {
+    public void setPages(String pages) {
         this.pages = pages;
     }
 
@@ -155,12 +194,26 @@ public class Book {
         this.summary = summary;
     }
 
-    public Bitmap getImage_bitmap() {
 
-        return image_bitmap;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setImage_bitmap(Bitmap image_bitmap) {
-        this.image_bitmap = image_bitmap;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(getId());
+        dest.writeString(getIsbn10());
+        dest.writeString(getTitle());
+        dest.writeString(getImage());
+        dest.writeString(getAuthor());
+        dest.writeString(getTranslator());
+        dest.writeString(getPublisher());
+        dest.writeString(getPubdate());
+        dest.writeString(getPrice());
+        dest.writeString(getPages());
+        dest.writeString(getAuthor_intro());
+        dest.writeString(getSummary());
+        dest.writeString(getBinding());
     }
 }

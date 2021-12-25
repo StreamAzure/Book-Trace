@@ -25,7 +25,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sqlCreateBookTable = "create table booktb (isbn varchar(15) not null unique, " +
                 "title text, image text, author varchar(100), translator varchar(100), " +
                 "publisher varchar(100), pubdate varchar(25), tags varchar(100), binding varchar(20), price varchar(25), "+
-                "pages integer, author_intro text, summary text)";
+                "pages verchar(25), author_intro text, summary text)";
+        //个人图书馆，书评信息总表：书评ID，发表用户ID，关联书籍ISBN，书评内容，书评点赞数，评分(5分满分)
+        String sqlCreateReviewTable = "create table reviewtb (id integer primary key autoincrement, userId integer, " +
+                "bookIsbn varchar(15), content text, likeCount integer, mark integer, date varchar(20))";
+
         //自由谈：话题（后台发布），ID，话题名称，话题描述，参与用户（字符串格式维护一个用户ID列表），相关主题数量
         String sqlCreateTopicTable = "create table topictb(id integer primary key autoincrement, title varchar(200) not null, "+
                 "description text, subscribers text, postCount integer)";
@@ -38,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(sqlCreatePersonTable);
         db.execSQL(sqlCreateBookTable);
+        db.execSQL(sqlCreateReviewTable);
         db.execSQL(sqlCreateTopicTable);
         db.execSQL(sqlCreatePostTable);
         db.execSQL(sqlCreateReplyTable);

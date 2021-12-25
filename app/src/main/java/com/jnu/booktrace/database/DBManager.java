@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.bean.Review;
 
 /*
 * 负责管理数据库对表中的数据进行增删改查
@@ -93,10 +94,37 @@ public class DBManager {
         book.setTags(cursor.getString(7));
         book.setBinding(cursor.getString(8));
         book.setPrice(cursor.getString(9));
-        book.setPages(cursor.getInt(10));
+        book.setPages(cursor.getString(10));
         book.setAuthor_intro(cursor.getString(11));
         book.setSummary(cursor.getString(12));
         cursor.close();
         return book;
+    }
+
+    //根据isbn号获取书籍的书评
+    public static Review QueryReview(String isbn){
+        String sql = "select * from reviewtb where isbn = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{isbn});
+        cursor.moveToFirst();
+        Review review = new Review(
+            cursor.getInt(1),
+            cursor.getString(2),
+            cursor.getString(3),
+            cursor.getInt(4),
+            cursor.getInt(5)
+        );
+        cursor.close();
+        return review;
+    }
+
+    //将一条review对象插入表
+    public static void insertReviewtb(Review review){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("userid",review.getUserId());
+        contentValues.put("bookisbn",review.getBookIsbn());
+        contentValues.put("content",review.getContent());
+        contentValues.put("likecount",review.getLikeCount());
+        contentValues.put("mark",review.getMark());
+        db.insert("reviewtb",null,contentValues);
     }
 }
