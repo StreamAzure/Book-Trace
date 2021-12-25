@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:id="@+id/item_book_root_view"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <!--衬底-->
     <View
         android:id="@+id/view_item_book_container"
