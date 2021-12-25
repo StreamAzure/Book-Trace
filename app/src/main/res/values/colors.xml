@@ -23,8 +23,11 @@
     <color name="gray_8a8a8a">#8a8a8a</color>
     <color name="icon_checked">#4b5ba7</color>
 
+    <!--字体颜色-->
     <color name="font_color">#0b182B</color>
-    <color name="secondary_font_color">#9DA6B7</color>
+    <color name="secondary_font_color">#404040</color>
+    <color name="hint_font_color">#9DA6B7</color>
+    <color name="info_font_color">#BDC1CC</color>
 
     <color name="topic_blue">#6885B1</color>
     <color name="topic_green">#A7CFD1</color>
