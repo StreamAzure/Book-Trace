@@ -9,9 +9,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-
     <string name="qr_code_text">二维码</string>
     <string name="scan_qr_code_warn">将二维码放入框内，即可自动扫描</string>
     <string name="scan_qr_code_from_photo_wrong">没有找到二维码</string>

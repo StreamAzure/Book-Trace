@@ -1,5 +1,7 @@
 package com.jnu.booktrace.utils;
 
+import static com.jnu.booktrace.database.DBManager.insertBooktb;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -44,7 +46,6 @@ public class ISBNApiUtil {
 //                        Log.e("MYTAG",book.getTitle());
 //                        Log.e("MYTAG",book.getImage());
                     }
-
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -60,7 +61,7 @@ public class ISBNApiUtil {
                 e.printStackTrace();
             }
         }
-        new DBManager().insertBooktb(book);
+        insertBooktb(book);
         return book;
     }
 
@@ -97,7 +98,6 @@ public class ISBNApiUtil {
         try {
             JSONObject result = new JSONObject(strJson);
             String status = result.getString("msg");
-            //TODO：还没处理API“请求成功”以外的情况，只是单纯地返回false
             if(status.equals("请求成功")){
                 JSONObject bookInfo = new JSONObject(result.getString("data"));
                 book.setId(bookInfo.getString("id"));
@@ -105,14 +105,30 @@ public class ISBNApiUtil {
                 book.setTitle(bookInfo.getString("name"));
                 book.setImage(bookInfo.getString("photoUrl"));
                 book.setAuthor(bookInfo.getString("author"));
-                book.setTranslator(bookInfo.getString("translator"));
-                book.setPublisher(bookInfo.getString("publishing"));
-                book.setPubdate(bookInfo.getString("published"));
-                book.setPrice(bookInfo.getString("price"));
-                book.setPages(bookInfo.getString("pages"));
-                book.setAuthor_intro(bookInfo.getString("authorIntro"));
-                book.setSummary(bookInfo.getString("description"));
-                book.setBinding(bookInfo.getString("designed"));
+                if(isValid(bookInfo.getString("translator"))) {
+                    book.setTranslator(bookInfo.getString("translator"));
+                }
+                if(isValid(bookInfo.getString("publishing"))){
+                    book.setPublisher(bookInfo.getString("publishing"));
+                }
+                if(isValid(bookInfo.getString("published"))) {
+                    book.setPubdate(bookInfo.getString("published"));
+                }
+                if(isValid(bookInfo.getString("price"))) {
+                    book.setPrice(bookInfo.getString("price"));
+                }
+                if(isValid(bookInfo.getString("pages"))) {
+                    book.setPages(bookInfo.getString("pages"));
+                }
+                if(isValid(bookInfo.getString("authorIntro"))) {
+                    book.setAuthor_intro(bookInfo.getString("authorIntro"));
+                }
+                if(isValid(bookInfo.getString("description"))) {
+                    book.setSummary(bookInfo.getString("description"));
+                }
+                if(isValid(bookInfo.getString("designed"))) {
+                    book.setBinding(bookInfo.getString("designed"));
+                }
 
                 return true;
             }
@@ -122,4 +138,15 @@ public class ISBNApiUtil {
         return false;
     }
 
+    /**
+     * 判断JSON字符串中的值是否正常
+     * @param string 解析后的某一项的值
+     * @return
+     */
+    private boolean isValid(String string){
+        if(string.equals("")){
+            return false;
+        }
+        else return true;
+    }
 }

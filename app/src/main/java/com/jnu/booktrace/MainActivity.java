@@ -1,22 +1,16 @@
 package com.jnu.booktrace;
 
-import static com.jnu.booktrace.database.DBManager.QueryUserBooks;
-import static com.jnu.booktrace.database.DBManager.initDB;
-import static com.jnu.booktrace.database.DBManager.isUserBookExist;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -53,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 person = DatabaseManager.getPersonFromName(name);
                 //判断本地数据库中表是否为空，为空则与远程同步建表
-                if(!isUserBookExist(name)){
-
-                }
+//                if(!isUserBookExist(name)){
+//
+//                }
             }
         });
         thread.start();

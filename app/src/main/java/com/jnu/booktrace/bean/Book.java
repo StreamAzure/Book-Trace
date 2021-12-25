@@ -26,17 +26,7 @@ public class Book implements Parcelable {
     private String tags;
 
     public Book(){
-        Class cls = this.getClass();
-        Field[] fields = cls.getDeclaredFields();
-        for(int i=0;i<13;i++){
-            Field f = fields[i];
-            f.setAccessible(true);
-            try {
-                Log.e("book",f.getName()+" "+f.get(this));
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
     protected Book(Parcel in) {
