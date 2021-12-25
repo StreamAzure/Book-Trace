@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.jnu.booktrace.bean.Book;
+import com.jnu.booktrace.bean.Drift;
 import com.jnu.booktrace.bean.Person;
 
 import java.sql.Connection;
@@ -12,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
     private static final String TAG = "DatabaseManager";
@@ -245,5 +248,29 @@ public class DatabaseManager {
             throwables.printStackTrace();
         }
         return book;
+    }
+
+    public static List<Drift> GetDrift(){
+        List<Drift> drifts = new ArrayList<>();
+        try {
+            connection = DBUtil.getConnection();
+            sql = "select * from drifttb";
+            preparedStatement = connection.prepareStatement(sql);
+            result = preparedStatement.executeQuery();
+            while(result.next()){
+                int id = result.getInt("id");
+                int author_id = result.getInt("author_id");
+                String time = result.getString("time");
+                String title = result.getString("title");
+                String book_author =result.getString("book_author");
+                String recommend = result.getString("recommend");
+                Drift drift = new Drift(id,author_id,time,title,book_author,recommend);
+                drifts.add(drift);
+            }
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return drifts;
     }
 }

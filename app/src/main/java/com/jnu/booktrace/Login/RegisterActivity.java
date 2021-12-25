@@ -109,6 +109,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     person.setPassword(password);
                     new Thread(()->{
                         DatabaseManager.insertPersontb(person);
+                        DBManager.deletePersontb();
+                        DBManager.insertPersontb(person);
                     }).start();
                     Toast.makeText(RegisterActivity.this,"注册成功",
                             Toast.LENGTH_LONG).show();

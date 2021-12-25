@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //创建用户信息表
         String sqlCreatePersonTable = "create table persontb (id integer primary key autoincrement, name varchar(25) not null unique, " +
-                "password varchar(50) not null, nickname varchar(20), description varchar(100))";
+                "password varchar(50) not null, nickname varchar(20),gender varchar(10),birth varchar(20), description text,avatar text)";
         //个人图书馆：书籍基本信息总表，ISBN号作为主键
         //ISBN号，标题，封面url，作者，译者，出版社，出版时间，分类/标签，精装/平装，定价（xx.xx元），页数，作者简介，书籍简介
         String sqlCreateBookTable = "create table booktb (isbn varchar(15) not null unique, " +
@@ -40,12 +40,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sqlCreateReplyTable = "create table replytb(id integer primary key autoincrement, content text not null, date text, "+
                 "author integer, relativePost integer, likeCount integer)";
 
+        //漂流瓶：ID，用户ID，日期，书籍标题，书籍作者，书籍读后感
+        String sqlCreateDriftTable = "create table drifttb(id integer primary key autoincrement, author_id integer not null, " +
+                "time varchar(20) not null, title varchar(100) not null, book_author varchar(100), recommend text)";
+
         db.execSQL(sqlCreatePersonTable);
         db.execSQL(sqlCreateBookTable);
         db.execSQL(sqlCreateReviewTable);
         db.execSQL(sqlCreateTopicTable);
         db.execSQL(sqlCreatePostTable);
         db.execSQL(sqlCreateReplyTable);
+        db.execSQL(sqlCreateDriftTable);
     }
 
     //数据库版本发生改变时调用

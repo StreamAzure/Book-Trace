@@ -1,18 +1,11 @@
 package com.jnu.booktrace.Login;
 
-import static android.content.ContentValues.TAG;
-import static android.os.Build.HOST;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
+import android.text.BoringLayout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,18 +14,11 @@ import android.widget.Toast;
 
 import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
+import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
-import com.jnu.booktrace.imagehandle.ImageHandle;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 作用：此activity用于实现BookTrace的登录功能
@@ -44,6 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button confirmBt, cancelBt;
     private Boolean exist = false,finish = false;
     private LinearLayout processBar;
+    private Person person;
 
 
     @Override
@@ -51,6 +38,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initComp();   //实现控件的初始化
+        if(DBManager.JudgePersonIsNotNull()){
+            Intent intent = new Intent(this, MainActivity.class);
+            String name = DBManager.GetNameFromPersontb();
+            nameEt.setText(name);
+            passwordEt.setText("********");
+            intent.putExtra("name",name);
+            startActivity(intent);
+        }
         String account = String.valueOf(nameEt.getText());
         confirmBt.setOnClickListener(this);
         cancelBt.setOnClickListener(this);
@@ -63,13 +58,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         confirmBt = findViewById(R.id.login_confirm);
         cancelBt = findViewById(R.id.login_cancel);
         processBar = findViewById(R.id.login_processBar);
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.login_confirm:
+
                 String name = nameEt.getText().toString();
                 String password = passwordEt.getText().toString();
                 if(name.equals("")){//登录成功
@@ -78,38 +73,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Toast.makeText(LoginActivity.this,"密码不能为空！",Toast.LENGTH_SHORT).show();
                 }else{
                     processBar.setVisibility(View.VISIBLE);
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Boolean judge = DatabaseManager.judgeLogin(name,password);
-                            Message message = new Message();
-                            if(judge){
-                                message.what = USER_EXiST;
-                                Log.i(TAG, name+"用户存在");
-                                exist = true;
-                            }
-                            finish = true;
-                        }
-                    });
-                    thread.start();
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    Boolean JudgePeopleInSqlite = DBManager.JudgePersonExist(name,password);
+                    if(!JudgePeopleInSqlite){
+                        JudgePeopleFromMysql(name,password);
+                    }else{
+                        finish = true;
+                        exist = true;
                     }
-                    while (true){
-                        try {
-                            thread.join();
-                            break;
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
                     if(finish){
                         if(exist){
+                            if(!JudgePeopleInSqlite){
+                                GetPeopleFromMysql(name);
+                                DBManager.insertPersontb(person);
+                            }
                             Intent intent = new Intent(this, MainActivity.class);
                             intent.putExtra("name",name);
+                            Toast.makeText(LoginActivity.this,"登录成功！",Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                             finish();
                         }else{
@@ -119,21 +98,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             passwordEt.setText("");
                         }
                     }
-
                 }
                 break;
             case R.id.login_cancel:
-                //String imageStr = ImageHandle.getImageStr("star.png");
-                String imageStr = null;
-                try {
-                    imageStr = readFile("star.png");
-                    Log.e("Login", imageStr);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.e("Login", imageStr);
-//                boolean generateImage = ImageHandle.generateImage(imageStr, "1.jpg");
-//                System.out.println(generateImage);
+                nameEt.setText("");
+                passwordEt.setText("");
                 break;
             case R.id.login_register:
                 Intent intent = new Intent(this, RegisterActivity.class);
@@ -142,34 +111,47 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
-    //读数据
-    public String readFile(String fileName) throws IOException {
-        String res = "";//有问题，没有更新res的地方，始终为空
-        try {
-            FileInputStream fin = openFileInput(fileName);
-            int length = fin.available();
-            byte[] buffer = new byte[length];
-            fin.read(buffer);
-            fin.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return res;
-    }
-
-
-    //写数据
-    public void writeFile(String fileName,String writestr) throws IOException{
-        try{
-            FileOutputStream fout =openFileOutput(fileName, MODE_PRIVATE);
-            byte [] bytes = writestr.getBytes();
-            fout.write(bytes);
-            fout.close();
-        }
-        catch(Exception e){
-            e.printStackTrace();
+    void JudgePeopleFromMysql(String name, String password){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Boolean judge = DatabaseManager.judgeLogin(name,password);
+                Message message = new Message();
+                if(judge){
+                    message.what = USER_EXiST;
+                    exist = true;
+                }
+                finish = true;
+            }
+        });
+        thread.start();
+        while (true){
+            try {
+                thread.join();
+                break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
+    void GetPeopleFromMysql(String name){
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                person = DatabaseManager.getPersonFromName(name);
+            }
+        });
+        thread.start();
+        while (true){
+            try {
+                thread.join();
+                break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
 

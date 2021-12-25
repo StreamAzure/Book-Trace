@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,8 +26,10 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.jnu.booktrace.Login.LoginActivity;
 import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
+import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
 import com.mysql.jdbc.MiniAdmin;
 
@@ -43,6 +46,7 @@ import java.util.List;
 public class PersonInfoActivity extends AppCompatActivity {
     private TextView gender, birth, nickname,description;
     private Intent intent;
+    private Button leave;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +77,7 @@ public class PersonInfoActivity extends AppCompatActivity {
         birth.setText(MainActivity.person.getBirth());
         description = findViewById(R.id.person_info_tv_description2);
         description.setText(MainActivity.person.getDescription());
+        leave = findViewById(R.id.person_info_bt_leave);
     }
     private void setListener() {
         nickname.addTextChangedListener(new TextWatcher() {
@@ -90,6 +95,15 @@ public class PersonInfoActivity extends AppCompatActivity {
                 if(!nickname.getText().toString().equals(MainActivity.person.getNickName())){
                     MainActivity.person.setNickName(nickname.getText().toString());
                 }
+            }
+        });
+        leave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DBManager.deletePersontb(); // 删除用户数据
+                Intent intent = new Intent(PersonInfoActivity.this, LoginActivity.class);
+                Toast.makeText(PersonInfoActivity.this,"退出登录成功",Toast.LENGTH_SHORT).show();
+                startActivity(intent);
             }
         });
     }

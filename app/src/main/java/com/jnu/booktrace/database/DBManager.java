@@ -12,6 +12,8 @@ import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.bean.Review;
 
+import java.sql.Statement;
+
 /*
 * 负责管理数据库对表中的数据进行增删改查
 **/
@@ -22,7 +24,34 @@ public class DBManager {
         DatabaseHelper databaseHelper = new DatabaseHelper(context,"BookTrace.db",null,1);
         db = databaseHelper.getWritableDatabase();
     }
-    
+    /*
+    * 判断本地数据库是否存在用户信息
+     */
+    public static Boolean JudgePersonIsNotNull(){
+        String sql = "select count(*) from persontb";
+        Cursor cursor = db.rawQuery(sql,null);
+        int result = 0 ;
+        if(cursor.moveToFirst()){
+            @SuppressLint("Range") int count = cursor.getInt(cursor.getColumnIndex("count(*)"));
+            result = count;
+        }
+        if(result==0) return false;
+        else return true;
+    }
+
+    /*
+    * 从用户表中获取姓名信息
+     */
+    @SuppressLint("Range")
+    public static String GetNameFromPersontb(){
+        String sql = "select * from persontb";
+        String name ="";
+        Cursor cursor = db.rawQuery(sql,null);
+        if(cursor.moveToFirst()){
+            name = cursor.getString(cursor.getColumnIndex("name"));
+        }
+        return name;
+    }
     /*
     * 向用户表中插入数据
      */
@@ -31,15 +60,18 @@ public class DBManager {
         contentValues.put("name",person.getName());
         contentValues.put("password",person.getPassword());
         contentValues.put("nickname",person.getNickName());
+        contentValues.put("gender",person.getGender());
+        contentValues.put("birth",person.getBirth());
         contentValues.put("description",person.getDescription());
+        contentValues.put("avatar",person.getAvatar());
         db.insert("persontb",null,contentValues);
     }
     /*
     * 判断输入的用户在数据库中是否存在
      */
-    public static Boolean JudgePersonExist(String name){
-        String sql = "select count(*) from persontb where name=?";
-        Cursor cursor = db.rawQuery(sql,new String[]{name});
+    public static Boolean JudgePersonExist(String name,String password){
+        String sql = "select count(*) from persontb where name=? and password =?";
+        Cursor cursor = db.rawQuery(sql,new String[]{name,password});
         int result=0;
         //判断
         if(cursor.moveToFirst()){
@@ -48,8 +80,16 @@ public class DBManager {
         }
         if(result==1) return true;
         else return false;
-        
     }
+
+    /*
+    * 根据用户名删除用户表中的用户
+     */
+    public static int deletePersontb(){
+        int i = db.delete("persontb",null,null);
+        return i;
+    }
+
 
     public static void insertBooktb(Book book){
         ContentValues contentValues = new ContentValues();
