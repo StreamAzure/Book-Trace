@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initDB(this);//初始化数据库
         intent = getIntent();
         name = intent.getStringExtra("name");
         Thread thread = new Thread(new Runnable() {
