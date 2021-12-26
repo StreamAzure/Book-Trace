@@ -19,8 +19,7 @@
             android:id="@+id/iv_item_post_avatar"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/touxiang"
-            android:background="@drawable/touxiang_bg"
+            android:src="@drawable/default_avatar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"/>
 

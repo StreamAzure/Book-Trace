@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.TagInfo;
+import com.jnu.booktrace.utils.AndroidBarUtils;
 import com.jnu.booktrace.utils.ImageUtil;
 
 import org.w3c.dom.Text;
@@ -37,6 +39,12 @@ public class LibraryBookDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library_book_detail);
+
+        //状态栏颜色更改
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //注意要清除 FLAG_TRANSLUCENT_STATUS flag
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        AndroidBarUtils.setBarDarkMode(this,true); //状态栏文字图标颜色为黑色
 
         initToolbar();
         initView();

@@ -38,7 +38,7 @@ public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ReplyHolder replyHolder = (ReplyHolder) holder;
         Reply reply = adpList.get(position);
-        replyHolder.ivAvatar.setBackgroundResource(R.drawable.ic_launcher_background);
+        replyHolder.ivAvatar.setBackgroundResource(reply.getAvatar());
         replyHolder.tvUsername.setText(reply.getUsername());
         replyHolder.tvContent.setText(reply.getContent());
         replyHolder.tvDate.setText(reply.getDate());

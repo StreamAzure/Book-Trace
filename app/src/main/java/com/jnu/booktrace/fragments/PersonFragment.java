@@ -99,16 +99,16 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
 
         person_tv_description.setText(MainActivity.person.getDescription());
-        //设置头像
-        if(MainActivity.person.getAvatar().equals("")){
-            if(MainActivity.person.getGender().equals("女")){
-                person_iv_avatar.setImageResource(R.drawable.woman);
-            }else {
-                person_iv_avatar.setImageResource(R.drawable.man);
-            }
-        }else{
-           person_iv_avatar.setImageBitmap(ImageHandle.stringToBitmap(MainActivity.person.getAvatar()));
-        }
+//        //设置头像
+//        if(MainActivity.person.getAvatar().equals("")){
+//            if(MainActivity.person.getGender().equals("女")){
+//                person_iv_avatar.setImageResource(R.drawable.woman);
+//            }else {
+//                person_iv_avatar.setImageResource(R.drawable.man);
+//            }
+//        }else{
+//           person_iv_avatar.setImageBitmap(ImageHandle.stringToBitmap(MainActivity.person.getAvatar()));
+//        }
 
 //        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.person.getAvatar());
 //        person_iv_avatar.setImageBitmap(bitmap);

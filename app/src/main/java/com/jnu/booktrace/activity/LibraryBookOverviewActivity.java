@@ -11,17 +11,21 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.TagInfo;
+import com.jnu.booktrace.utils.AndroidBarUtils;
 import com.jnu.booktrace.utils.ISBNApiUtil;
 import com.jnu.booktrace.utils.ImageUtil;
 
@@ -33,14 +37,45 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
     private List<Book> mBookList;
     private RecyclerView mRecyclerView;
     private BookAdapter mBookAdapter;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_library_book_overview);
 
+        //状态栏颜色更改
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //注意要清除 FLAG_TRANSLUCENT_STATUS flag
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        AndroidBarUtils.setBarDarkMode(this,true); //状态栏文字图标颜色为黑色
+
+        initToolbar();
         initData();
         initRecyclerView();
+    }
+
+    private void initToolbar(){
+        //隐藏默认actionbar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
+        //获取toolbar
+        toolbar = findViewById(R.id.toolbar);
+//        //主标题，必须在setSupportActionBar之前设置，否则无效，如果放在其他位置，则直接setTitle即可
+        toolbar.setTitle("");
+        //用toolbar替换actionbar
+        setSupportActionBar(toolbar);
+        //左侧按钮：可见+更换图标+点击监听
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//显示toolbar的返回按钮
+        //toolBar.setNavigationIcon(R.mipmap.back_white);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initData() {
