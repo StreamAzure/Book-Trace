@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.RoundedBitmapDrawable;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
+import com.jnu.booktrace.imagehandle.ImageHandle;
 import com.jnu.booktrace.person.PersonInfoActivity;
 
 
@@ -34,6 +37,23 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         setTopName();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                DatabaseManager.updatePersontb(MainActivity.person);
+//            }
+//        });
+//        thread.start();
+//
+//        while (true){
+//            try {
+//                thread.join();
+//                break;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
     }
 
     public PersonFragment() {}
@@ -79,8 +99,19 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
         person_tv_description.setText(MainActivity.person.getDescription());
         //设置头像
-        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.person.getAvatar());
-        person_iv_avatar.setImageBitmap(bitmap);
+        if(MainActivity.person.getAvatar().equals("")){
+            if(MainActivity.person.getGender().equals("女")){
+                person_iv_avatar.setImageResource(R.drawable.woman);
+            }else {
+                person_iv_avatar.setImageResource(R.drawable.man);
+            }
+        }else{
+           person_iv_avatar.setImageBitmap(ImageHandle.stringToBitmap(MainActivity.person.getAvatar()));
+        }
+
+//        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.person.getAvatar());
+//        person_iv_avatar.setImageBitmap(bitmap);
+
     }
 
     private void initFrag(View view) {

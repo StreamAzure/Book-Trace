@@ -71,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         myRequestPermission(); //权限请求
     }
 
+
+
     private void myRequestPermission(){
         //6.0版本或以上需请求权限
         String[] permissions=new String[]{Manifest.permission.

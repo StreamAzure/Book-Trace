@@ -1,9 +1,25 @@
 package com.jnu.booktrace.imagehandle;
 
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.NinePatchDrawable;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,55 +29,143 @@ import java.nio.charset.StandardCharsets;
 
 
 public class ImageHandle {
-    public static String getImageStr(String filePath) {
-        InputStream inputStream = null;
-        byte[] data = null;
+
+    /**
+     * 将传入的bitmap转为字符串保存
+     * @param bitmap - 图片
+     * @return 图片字符串
+     */
+    public static String getImageStr(Bitmap bitmap) {
+
+        String string=null;
+        ByteArrayOutputStream bStream=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,bStream);
+        byte[]bytes=bStream.toByteArray();
+        string= Base64.encodeToString(bytes,Base64.DEFAULT);
+        return string;
+
+    }
+
+    /**
+     * 将传入的字符串转换为图片
+     * @param string - 字符串
+     * @return bitmap图片
+     */
+    public static Bitmap stringToBitmap(String string) {
+        // 将字符串转换成Bitmap类型
+        Bitmap bitmap = null;
         try {
-            inputStream = new FileInputStream(filePath);
-            data = new byte[inputStream.available()];
-            inputStream.read(data);
-            inputStream.close();
-        } catch (IOException e) {
+            byte[] bitmapArray;
+            bitmapArray = Base64.decode(string, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+                    bitmapArray.length);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        // 加密
-        return Base64Utils.encodeToString(data.toString());
+        return bitmap;
     }
-    public static boolean generateImage(String imgStr, String filename) {
-        if (imgStr == null) {
-            return false;
+
+    /**
+     * 将传入的bitmap转为圆形
+     * @param bitmap - 原来的图片
+     * @return 圆形的图片
+     */
+    public static Bitmap toRoundBitmap(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float roundPx;
+        float left, top, right, bottom, dst_left, dst_top, dst_right, dst_bottom;
+        if (width <= height) {
+            roundPx = width / 2;
+            left = 0;
+            top = 0;
+            right = width;
+            bottom = width;
+            height = width;
+            dst_left = 0;
+            dst_top = 0;
+            dst_right = width;
+            dst_bottom = width;
+        } else {
+            roundPx = height / 2;
+            float clip = (width - height) / 2;
+            left = clip;
+            right = width - clip;
+            top = 0;
+            bottom = height;
+            width = height;
+            dst_left = 0;
+            dst_top = 0;
+            dst_right = height;
+            dst_bottom = height;
         }
-        try {
-            // 解密
-            byte[] b = Base64Utils.decodeToString(imgStr).getBytes();
-            // 处理数据
-            for(int i = 0; i < b.length; ++i) {
-                if (b[i] < 0) {
-                    b[i] += 256;
-                }
-            }
-            OutputStream out = new FileOutputStream(filename);
-            out.write(b);
-            out.flush();
-            out.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
+
+        Bitmap output = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect src = new Rect((int) left, (int) top, (int) right,
+                (int) bottom);
+        final Rect dst = new Rect((int) dst_left, (int) dst_top,
+                (int) dst_right, (int) dst_bottom);
+        new RectF(dst);
+
+        paint.setAntiAlias(true);// 设置画笔无锯齿
+
+        canvas.drawARGB(0, 0, 0, 0); // 填充整个Canvas
+        paint.setColor(color);
+        canvas.drawCircle(roundPx, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));// 设置两张图片相交时的模式,参考http://trylovecatch.iteye.com/blog/1189452
+        canvas.drawBitmap(bitmap, src, dst, paint); // 以Mode.SRC_IN模式合并bitmap和已经draw了的Circle
+
+        return output;
     }
-    public static Bitmap makeBitmapSquare(Bitmap oldbitmap, int newWidth){
-        Bitmap newbitmap=null;
-        if (oldbitmap.getWidth()>oldbitmap.getHeight()){
-            newbitmap=Bitmap.createBitmap(oldbitmap,oldbitmap.getWidth()/2-oldbitmap.getHeight()/2,0,oldbitmap.getHeight(),oldbitmap.getHeight());
-        }else{
-            newbitmap=Bitmap.createBitmap(oldbitmap,0,oldbitmap.getHeight()/2-oldbitmap.getWidth()/2,oldbitmap.getWidth(),oldbitmap.getWidth());
+
+    /**
+     * 将传入的drawable转成bitmap
+     * @param a - 传入的drawable对象id
+     * @param context - context
+     * @return 转换后的bitmap
+     */
+    public static Bitmap drawable2Bitmap(int a , Context context) {
+        Resources resources = context.getResources();
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable drawable = resources.getDrawable(a);
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        } else if (drawable instanceof NinePatchDrawable) {
+            Bitmap bitmap = Bitmap
+                    .createBitmap(
+                            drawable.getIntrinsicWidth(),
+                            drawable.getIntrinsicHeight(),
+                            drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                                    : Bitmap.Config.RGB_565);
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),
+                    drawable.getIntrinsicHeight());
+            drawable.draw(canvas);
+            return bitmap;
+        } else {
+            return null;
         }
-        int width=newbitmap.getWidth();
-        float scaleWidth=((float)newWidth)/width;
-        Matrix matrix=new Matrix();
-        matrix.postScale(scaleWidth,scaleWidth);
-        newbitmap= Bitmap.createBitmap(newbitmap,0,0,width,width,matrix,true);
-        return newbitmap;
     }
+
+    /**
+     * 旋转Bitmap图片
+     *
+     * @param context -视图
+     * @param degree 旋转的角度
+     * @param srcBitmap 需要旋转的图片的Bitmap
+     * @return
+     */
+    public static Bitmap rotateBimap(Context context, float degree, Bitmap srcBitmap) {
+        Matrix matrix = new Matrix();
+        matrix.reset();
+        matrix.setRotate(degree);
+        Bitmap bitmap = Bitmap.createBitmap(srcBitmap, 0, 0, srcBitmap.getWidth(), srcBitmap.getHeight()
+                , matrix, true);
+        return bitmap;
+    }
+
 }
