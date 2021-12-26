@@ -36,12 +36,12 @@ public class DriftAdapter extends RecyclerView.Adapter {
         MyViewHolder viewHolder = (MyViewHolder) holder;
         viewHolder.getDrift_author().setText(drifts.get(position).getBook_Author());
         viewHolder.getDrift_title().setText(drifts.get(position).getTitle());
-//            viewHolder.getRootView().setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//
-//                }
-//            });
+            viewHolder.getRootView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
     }
 
     @Override

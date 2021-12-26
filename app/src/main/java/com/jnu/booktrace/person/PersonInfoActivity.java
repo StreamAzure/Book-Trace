@@ -104,6 +104,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(PersonInfoActivity.this, LoginActivity.class);
                 Toast.makeText(PersonInfoActivity.this,"退出登录成功",Toast.LENGTH_SHORT).show();
                 startActivity(intent);
+                finish();
             }
         });
     }
@@ -115,7 +116,8 @@ public class PersonInfoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.person_info_rl_avatar:
-
+                intent = new Intent(this,ChangeAvatarActivity.class);
+                startActivity(intent);
                 break;
             case R.id.person_info_rl_gender:
                 showGenderDialog();

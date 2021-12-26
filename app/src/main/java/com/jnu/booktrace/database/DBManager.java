@@ -9,9 +9,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.jnu.booktrace.bean.Book;
+import com.jnu.booktrace.bean.Drift;
 import com.jnu.booktrace.bean.Person;
 
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 * 负责管理数据库对表中的数据进行增删改查
@@ -50,6 +53,25 @@ public class DBManager {
             name = cursor.getString(cursor.getColumnIndex("name"));
         }
         return name;
+    }
+    /*
+    * 根据用户姓名获取用户
+     */
+    @SuppressLint("Range")
+    public static Person getPersonFromName(String name){
+        Person person = new Person();
+        String sql = "select * from persontb where name = ?";
+        Cursor cursor = db.rawQuery(sql,new String[]{name});
+        cursor.moveToFirst();
+        person.setId(cursor.getInt(cursor.getColumnIndex("id")));
+        person.setName(name);
+        person.setPassword(cursor.getString(cursor.getColumnIndex("password")));
+        person.setNickName(cursor.getString(cursor.getColumnIndex("nickname")));
+        person.setGender(cursor.getString(cursor.getColumnIndex("gender")));
+        person.setBirth(cursor.getString(cursor.getColumnIndex("birth")));
+        person.setDescription(cursor.getString(cursor.getColumnIndex("description")));
+        person.setAvatar(cursor.getString(cursor.getColumnIndex("avatar")));
+        return person;
     }
     /*
     * 向用户表中插入数据
@@ -139,4 +161,53 @@ public class DBManager {
         cursor.close();
         return book;
     }
+
+    //更新漂流瓶数据表
+    //public static
+    //获取根据用户名获取漂流瓶
+    public static List<Drift> GetOwnDriftById(int author_id){
+        List<Drift> drifts = new ArrayList<>();
+        String sql = "select * from drifttb where author_id = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{author_id+""});
+        while(cursor.moveToNext()){
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("time"));
+            @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
+            @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_title"));
+            @SuppressLint("Range") String recommend = cursor.getString(cursor.getColumnIndex("recommend"));
+            Drift drift = new Drift(id, author_id, time, title,book_author,recommend);
+            drifts.add(drift);
+        }
+        return drifts;
+    }
+
+    //获取得到的其他人的漂流瓶
+    public static List<Drift> GetOtherDrift(int author_id){
+        List<Drift> drifts = new ArrayList<>();
+        String sql = "select * from drifttb where author_id != ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{author_id+""});
+        while(cursor.moveToNext()){
+            @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+            @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("time"));
+            @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
+            @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_title"));
+            @SuppressLint("Range") String recommend = cursor.getString(cursor.getColumnIndex("recommend"));
+            Drift drift = new Drift(id, author_id, time, title,book_author,recommend);
+            drifts.add(drift);
+        }
+        return drifts;
+    }
+
+    //插入一条漂流瓶到数据表
+    public static void insertOneDriftToDrifttb(Drift drift){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id",drift.getId());
+        contentValues.put("author_id",drift.getAuthor_id());
+        contentValues.put("time",drift.getTime());
+        contentValues.put("title",drift.getTitle());
+        contentValues.put("book_author",drift.getBook_Author());
+        contentValues.put("recommend",drift.getRecommend());
+        db.insert("drifttb",null,contentValues);
+    }
+
 }

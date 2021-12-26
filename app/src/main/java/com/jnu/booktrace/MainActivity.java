@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
 import com.jnu.booktrace.fragments.DriftFragment;
 import com.jnu.booktrace.fragments.FreeTalkFragment;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                person = DatabaseManager.getPersonFromName(name);
+                person = DBManager.getPersonFromName(name);
+                //if();
             }
         });
         thread.start();
