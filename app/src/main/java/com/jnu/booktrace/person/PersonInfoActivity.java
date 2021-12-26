@@ -171,18 +171,19 @@ public class PersonInfoActivity extends AppCompatActivity {
             @Override
             public void run() {
                 DatabaseManager.updatePersontb(MainActivity.person);
+
             }
         });
         thread.start();
         //明显卡顿感，不等了
-//        while (true){
-//            try {
-//                thread.join();
-//                break;
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        while (true){
+            try {
+                thread.join();
+                break;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     //选择性别对话框

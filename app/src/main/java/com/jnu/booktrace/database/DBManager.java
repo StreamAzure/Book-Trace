@@ -82,6 +82,7 @@ public class DBManager {
      */
     public static void insertPersontb(Person person){
         ContentValues contentValues = new ContentValues();
+        contentValues.put("id",person.getId());
         contentValues.put("name",person.getName());
         contentValues.put("password",person.getPassword());
         contentValues.put("nickname",person.getNickName());
@@ -110,9 +111,8 @@ public class DBManager {
     /*
     * 根据用户名删除用户表中的用户
      */
-    public static int deletePersontb(){
-        int i = db.delete("persontb",null,null);
-        return i;
+    public static void deletePersontb(){
+        db.execSQL("delete from persontb");
     }
 
 
@@ -178,7 +178,19 @@ public class DBManager {
     }
 
     //更新漂流瓶数据表
-    //public static
+    public static void UpdateDrift(List<Drift> drifts){
+        db.execSQL("delete from drifttb");  //清空漂流瓶表中数据
+        for(Drift drift:drifts){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("id",drift.getId());
+            contentValues.put("author_id",drift.getAuthor_id());
+            contentValues.put("time",drift.getTime());
+            contentValues.put("title",drift.getTitle());
+            contentValues.put("book_author",drift.getBook_Author());
+            contentValues.put("recommend",drift.getRecommend());
+            db.insert("drifttb",null,contentValues);
+        }
+    }
     //获取根据用户名获取漂流瓶
     public static List<Drift> GetOwnDriftById(int author_id){
         List<Drift> drifts = new ArrayList<>();
@@ -188,7 +200,7 @@ public class DBManager {
             @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("time"));
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
-            @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_title"));
+            @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_author"));
             @SuppressLint("Range") String recommend = cursor.getString(cursor.getColumnIndex("recommend"));
             Drift drift = new Drift(id, author_id, time, title,book_author,recommend);
             drifts.add(drift);
@@ -205,7 +217,7 @@ public class DBManager {
             @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("time"));
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
-            @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_title"));
+            @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_author"));
             @SuppressLint("Range") String recommend = cursor.getString(cursor.getColumnIndex("recommend"));
             Drift drift = new Drift(id, author_id, time, title,book_author,recommend);
             drifts.add(drift);
@@ -224,6 +236,8 @@ public class DBManager {
         contentValues.put("recommend",drift.getRecommend());
         db.insert("drifttb",null,contentValues);
     }
+
+//    public static void
 
 
     /**

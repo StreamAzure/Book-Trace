@@ -67,6 +67,7 @@ public class DriftFragment extends Fragment {
         OwnDriftFragment ownDriftFragment = new OwnDriftFragment();
         fragmentList.add(otherDriftFragment);
         fragmentList.add(ownDriftFragment);
+
         viewPager2.setAdapter(new FragmentStateAdapter(this) {
             @NonNull
             @Override
@@ -79,6 +80,8 @@ public class DriftFragment extends Fragment {
                 return fragmentList.size();
             }
         });
+        viewPager2.setSaveEnabled(false);
+        viewPager2.setOffscreenPageLimit(fragmentList.size());
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabLayout, viewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.jnu.booktrace.bean.Drift;
 import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
@@ -51,10 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
         intent = getIntent();
         name = intent.getStringExtra("name");
+        person = DBManager.getPersonFromName(name);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                person = DBManager.getPersonFromName(name);
+                //每次更新drift数据库
+                List<Drift> drifts = DatabaseManager.GetDrift();
+                DBManager.UpdateDrift(drifts);
                 //if();
             }
         });

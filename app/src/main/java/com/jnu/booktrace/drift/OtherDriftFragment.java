@@ -18,22 +18,7 @@ public class OtherDriftFragment extends BaseDriftFragment {
 
     @Override
     public void loadDatas() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                setmDatas(DatabaseManager.GetDriftById(MainActivity.person.getId()));
-            }
-        });
-        thread.start();
-        while (true)
-        {
-            try {
-                thread.join();
-                break;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        setmDatas(DBManager.GetOtherDrift(MainActivity.person.getId()));
     }
 
 }
