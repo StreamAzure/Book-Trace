@@ -19,6 +19,7 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:titleEnabled="false"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <!--楼主内容-->
@@ -31,15 +32,12 @@
 
                 <!--顶部标题栏-->
                 <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_gravity="top"
                     android:background="@color/white"
                     app:layout_collapseMode="pin">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="我是toolbar" />
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -47,9 +45,10 @@
             <LinearLayout
                 android:id="@+id/layout_activity_post_reply_info"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingHorizontal="10dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="10dp"
                 android:gravity="center_vertical"
                 app:layout_constraintTop_toBottomOf="@id/layout_activity_reply_head"
                 android:background="@color/white">
@@ -59,7 +58,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
-                    android:text="全部回复"/>
+                    android:textColor="@color/font_color"
+                    android:textSize="18sp"
+                    android:text="全部评论"/>
 
                 <!--回复数量-->
                 <TextView
@@ -67,8 +68,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
+                    android:textColor="@color/hint_font_color"
+                    android:textSize="14sp"
                     android:gravity="end"
-                    android:text="共 10 条"/>
+                    android:text="共10条"/>
             </LinearLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

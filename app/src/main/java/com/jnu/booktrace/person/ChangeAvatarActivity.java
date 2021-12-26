@@ -111,7 +111,7 @@ public class ChangeAvatarActivity extends AppCompatActivity {
                                 try {
                                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photos.get(0).uri);
                                     Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
-                                    bitmap1= ImageHandle.rotateBimap(ChangeAvatarActivity.this,90,bitmap1);
+                                    //bitmap1= ImageHandle.rotateBimap(ChangeAvatarActivity.this,90,bitmap1);
                                     MainActivity.person.setAvatar(ImageHandle.getImageStr(bitmap1));
                                     imageView_tx.setImageBitmap(bitmap1);
                                 } catch (IOException e) {

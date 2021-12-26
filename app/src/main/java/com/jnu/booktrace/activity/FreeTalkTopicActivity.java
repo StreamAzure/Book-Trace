@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.adapter.PostAdapter;
 import com.jnu.booktrace.bean.Post;
@@ -34,6 +35,8 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
     private int[] colors;
     //因为setExpanded会调用事件监听，所以通过标志过滤掉
     public static int expendedtag=2;
+    private TabLayout tabLayout;
+    private Topic topic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,9 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
         setContentView(R.layout.activity_free_talk_topic);
 
         initColors();
-        initData();
         initToolbar();
+        initData();
+        initTabLayout();
 
         //状态栏颜色更改
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -67,9 +71,18 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
         };
     }
 
+    private void initTabLayout(){
+        String[] titles = new String[]{"最新"};
+        tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab()); //只有一个标签
+        for(int i=0;i<titles.length;i++){
+            tabLayout.getTabAt(i).setText(titles[i]);
+        }
+    }
+
     private void initToolbar(){
         Intent intent = getIntent();
-        Topic topic = (Topic)intent.getParcelableExtra("topic");
+        topic = (Topic)intent.getParcelableExtra("topic");
         int position = intent.getIntExtra("position",0);
 
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
@@ -78,6 +91,7 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
         AppBarLayout appBarLayout = findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
         if(null != actionBar){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -88,24 +102,26 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
             @Override
             //verticalOffset是当前appbarLayout的高度与最开始appbarlayout高度的差，向上滑动的话是负数
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                //通过日志得出活动启动是两次，由于之前有setExpanded所以三次
-                Log.e("启动活动调用监听次数","几次");
-                if(getSupportActionBar().getHeight()-appBarLayout.getHeight()==verticalOffset){
+//                Log.e("count"," "+verticalOffset);
+//                Log.e("count","getsupportActionbar "+getSupportActionBar().getHeight()
+//                +" collapsing "+collapsingToolbarLayout.getHeight());
+                if(getSupportActionBar().getHeight() - collapsingToolbarLayout.getHeight() == verticalOffset){
                     //折叠监听
-                    Toast.makeText(FreeTalkTopicActivity.this,"折叠了",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(FreeTalkTopicActivity.this,"折叠了",Toast.LENGTH_SHORT).show();
+                    toolbar.setTitle(topic.getTitle());
                 }
                 if(expendedtag==2&&verticalOffset==0){
                     //展开监听
-                    Toast.makeText(FreeTalkTopicActivity.this, "展开了",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(FreeTalkTopicActivity.this, "展开了",Toast.LENGTH_SHORT).show();
+                    toolbar.setTitle("");
                 }
-                if(expendedtag!=2&&verticalOffset==0){
-                    expendedtag++;
-                }
+//                if(expendedtag!=2&&verticalOffset==0){
+//                    expendedtag++;
+//                }
             }
         });
-
-        //设置折叠标题栏的标题
-        collapsingToolbarLayout.setTitle(topic.getTitle());
+        TextView tvTopicTitle = findViewById(R.id.tv_topic_title);
+        tvTopicTitle.setText(topic.getTitle());
         //设置折叠标题栏的内容
         TextView tvTopicContent = findViewById(R.id.tv_topic_content);
         tvTopicContent.setText(topic.getContent());
@@ -117,13 +133,13 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
 
     private void initData(){
         posts = new ArrayList<>();
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
-        posts.add(new Post("电饭煲","1234567777777","你好，测试"));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
+        posts.add(new Post("电饭煲","1234567777777",topic.getTitle()));
     }
 }
