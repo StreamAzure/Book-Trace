@@ -46,6 +46,7 @@
             android:background="@color/white"
             android:textColor="@color/font_color"
             android:layout_gravity="left"
+            android:onClick="onClick"
             app:layout_constraintRight_toLeftOf="@id/person_info_iv_avatar2"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"

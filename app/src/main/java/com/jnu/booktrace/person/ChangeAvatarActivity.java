@@ -48,19 +48,19 @@ public class ChangeAvatarActivity extends AppCompatActivity {
         initPic();
 
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Bitmap bitmap2= ImageHandle.makeBitmapSquare(imageBitmap,120);
-            RoundedBitmapDrawable roundImg1= RoundedBitmapDrawableFactory.create(getResources(),bitmap2);
-            roundImg1.setAntiAlias(true);
-            roundImg1.setCornerRadius(bitmap2.getWidth()/2);
-            imageView_tx.setImageDrawable(roundImg1);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == 1 && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//            Bitmap bitmap2= ImageHandle.makeBitmapSquare(imageBitmap,120);
+//            RoundedBitmapDrawable roundImg1= RoundedBitmapDrawableFactory.create(getResources(),bitmap2);
+//            roundImg1.setAntiAlias(true);
+//            roundImg1.setCornerRadius(bitmap2.getWidth()/2);
+//            imageView_tx.setImageDrawable(roundImg1);
+//        }
+//    }
 
     private void initPic() {
         Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.test_bg);
@@ -119,7 +119,6 @@ public class ChangeAvatarActivity extends AppCompatActivity {
                                 File file = new File(photos.get(0).path);
 
                             }
-
                             @Override
                             public void onCancel() {
                             }

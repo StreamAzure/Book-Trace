@@ -234,4 +234,13 @@ public class PersonInfoActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void onClick(View view) { //设计头像的点击事件
+        switch (view.getId()){
+            case R.id.person_info_tv_avatar:
+                intent = new Intent(PersonInfoActivity.this,ChangeAvatarActivity.class);
+                startActivity(intent);
+                break;
+        }
+    }
 }
