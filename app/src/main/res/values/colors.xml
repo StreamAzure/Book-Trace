@@ -30,6 +30,9 @@
     <color name="info_font_color">#BDC1CC</color>
     <color name="font_green">#5C9279</color>
 
+    <!--按钮点击效果-->
+    <color name="botton_normal">#5C9279</color>
+    <color name="botton_click">#3A5C4C</color>
     <!--主题帖浏览页话题按钮的背景颜色-->
     <color name="topic_in_post_background">#F3F3F5</color>
 

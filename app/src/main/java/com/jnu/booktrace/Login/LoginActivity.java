@@ -2,6 +2,7 @@ package com.jnu.booktrace.Login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * 作用：此activity用于实现BookTrace的登录功能
  * 功能：登录界面判断，添加用户页面跳转
  * */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends Activity implements View.OnClickListener {
     private static int USER_EXiST=1;
     private EditText nameEt, passwordEt;
     private Button confirmBt, cancelBt;
@@ -48,7 +49,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         String account = String.valueOf(nameEt.getText());
         confirmBt.setOnClickListener(this);
-        cancelBt.setOnClickListener(this);
     }
 
     /**初始化控件*/
@@ -56,7 +56,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         nameEt = findViewById(R.id.login_name);
         passwordEt = findViewById(R.id.login_pwd);
         confirmBt = findViewById(R.id.login_confirm);
-        cancelBt = findViewById(R.id.login_cancel);
         processBar = findViewById(R.id.login_processBar);
     }
 
@@ -99,10 +98,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         }
                     }
                 }
-                break;
-            case R.id.login_cancel:
-                nameEt.setText("");
-                passwordEt.setText("");
                 break;
             case R.id.login_register:
                 Intent intent = new Intent(this, RegisterActivity.class);

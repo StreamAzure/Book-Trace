@@ -32,6 +32,9 @@
 
     <style name="Theme.BookTrace.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+    <style name="Theme.BookTrace.FullScreen">
+        <item name="android:windowFullscreen">true</item>
+    </style>
 
     <style name="Theme.BookTrace.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
