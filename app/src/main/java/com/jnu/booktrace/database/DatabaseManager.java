@@ -2,8 +2,10 @@ package com.jnu.booktrace.database;
 
 import android.content.SyncRequest;
 import android.database.Cursor;
+import android.os.Message;
 import android.util.Log;
 
+import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Drift;
 import com.jnu.booktrace.bean.Person;
@@ -280,16 +282,22 @@ public class DatabaseManager {
         return count >= 0;
     }
 
-    public static List<Drift> GetDriftById(int author_id){
+    /**
+     * 根据用户id找到他的漂流瓶
+     * @return 漂流瓶列表
+     */
+
+    public static List<Drift> GetDrift(){
         List<Drift> drifts = new ArrayList<>();
         try {
             connection = DBUtil.getConnection();
-            sql = "select * from drifttb where author_id = ?";
+            sql = "select * from drifttb";
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1,author_id);
+
             result = preparedStatement.executeQuery();
             while(result.next()){
                 int id = result.getInt("id");
+                int author_id = result.getInt("author_id");
                 String time = result.getString("time");
                 String title = result.getString("title");
                 String book_author =result.getString("book_author");
@@ -304,7 +312,49 @@ public class DatabaseManager {
         return drifts;
     }
 
+    /**
+     * 获取漂流瓶个数
+     * @return 漂流瓶个数
+     */
+    public static int GetSizeOfDrifttb(){
+        int count = 0;
+        try {
+            connection = DBUtil.getConnection();
+            sql = "select count(*) from drifttb";
+            preparedStatement = connection.prepareStatement(sql);
+            result = preparedStatement.executeQuery();
+            while(result.next()){
+                count = result.getInt("count(*)");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return count;
+    }
+
+    /**
+     *
+     * @return
+     */
 //    public static Drift GetOneDriftByRandom(){
+//        Drift drift = new Drift();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                int count = GetSizeOfDrifttb();
+//
+//            }
+//        });
+//        thread.start();
+//        while (true){
+//            try {
+//                thread.join();
+//                break;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
 //
 //    }
 

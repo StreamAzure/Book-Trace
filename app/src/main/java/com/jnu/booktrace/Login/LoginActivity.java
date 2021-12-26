@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.text.BoringLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,6 +46,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             nameEt.setText(name);
             passwordEt.setText("********");
             intent.putExtra("name",name);
+            Log.i("标志位",  "用户为："+name);
             startActivity(intent);
         }
         String account = String.valueOf(nameEt.getText());
