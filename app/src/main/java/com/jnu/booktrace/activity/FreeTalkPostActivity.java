@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.adapter.PostAdapter;
 import com.jnu.booktrace.adapter.ReplyAdapter;
 import com.jnu.booktrace.bean.Reply;
+import com.jnu.booktrace.utils.AndroidBarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,13 @@ public class FreeTalkPostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_free_talk_post);
+
+        //状态栏颜色更改
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //注意要清除 FLAG_TRANSLUCENT_STATUS flag
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        AndroidBarUtils.setBarDarkMode(this,true); //状态栏文字图标颜色为黑色
 
         initData();
 

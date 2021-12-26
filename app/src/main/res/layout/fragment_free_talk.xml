@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
+            app:titleTextColor="@color/font_color"
             app:popupTheme="@style/Theme.BookTrace.PopupOverlay">
 
         </androidx.appcompat.widget.Toolbar>

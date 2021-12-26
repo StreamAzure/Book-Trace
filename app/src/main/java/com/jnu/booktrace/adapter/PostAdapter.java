@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
@@ -48,7 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         postHolder.tvUsername.setText(post.getUsername());
         postHolder.tvContent.setText(post.getContent());
         postHolder.tvDate.setText(post.getDate());
-        postHolder.btnRelativeTopic.setText(post.getRelativeTopic());
+        postHolder.tvRelativeTopicTitle.setText(post.getRelativeTopic());
         postHolder.btnReply.setText(post.getReplyCount()+"");
         postHolder.btnLike.setText(post.getLikeCount()+"");
         postHolder.rootView.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +68,10 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class PostHolder extends RecyclerView.ViewHolder{
         View rootView;
+        CardView relativeTopic;
         ImageView ivAvatar;
-        TextView tvUsername, tvContent, tvDate;
-        Button btnReply, btnLike, btnRelativeTopic;
+        TextView tvUsername, tvContent, tvDate, tvRelativeTopicTitle;
+        Button btnReply, btnLike;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,7 +82,8 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvDate = itemView.findViewById(R.id.tv_item_post_date);
             btnReply = itemView.findViewById(R.id.btn_item_post_reply);
             btnLike = itemView.findViewById(R.id.btn_item_post_like);
-            btnRelativeTopic = itemView.findViewById(R.id.btn_item_post_relative_topic);
+            relativeTopic = itemView.findViewById(R.id.cardView_item_post_relative_topic);
+            tvRelativeTopicTitle = itemView.findViewById(R.id.tv_relativeTopic_title);
         }
     }
 }
