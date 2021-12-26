@@ -41,12 +41,7 @@ public class ShowBottomDialog {
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.show();
 
-        dialog.findViewById(R.id.bottom_tv_look).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+
 
         dialog.findViewById(R.id.bottom_tv_open).setOnClickListener(new View.OnClickListener() {
             @Override

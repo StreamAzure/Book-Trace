@@ -26,18 +26,19 @@ import android.widget.ImageView;
 import com.huantansheng.easyphotos.EasyPhotos;
 import com.huantansheng.easyphotos.callback.SelectCallback;
 import com.huantansheng.easyphotos.models.album.entity.Photo;
+import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
-import com.jnu.booktrace.fragments.ShowBottomDialog;
 
 import com.jnu.booktrace.imagehandle.GlideEngine;
 import com.jnu.booktrace.imagehandle.ImageHandle;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
 public class ChangeAvatarActivity extends AppCompatActivity {
-    private ShowBottomDialog showBottomDialog;
+
     private ImageView imageView_tx;
     private Uri imageUri;
     @Override
@@ -48,27 +49,25 @@ public class ChangeAvatarActivity extends AppCompatActivity {
         initPic();
 
     }
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1 && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            Bitmap bitmap2= ImageHandle.makeBitmapSquare(imageBitmap,120);
-//            RoundedBitmapDrawable roundImg1= RoundedBitmapDrawableFactory.create(getResources(),bitmap2);
-//            roundImg1.setAntiAlias(true);
-//            roundImg1.setCornerRadius(bitmap2.getWidth()/2);
-//            imageView_tx.setImageDrawable(roundImg1);
-//        }
-//    }
 
     private void initPic() {
-        Bitmap bitmap1= BitmapFactory.decodeResource(getResources(), R.drawable.test_bg);
-        Bitmap bitmap2= ImageHandle.makeBitmapSquare(bitmap1,120);
-        RoundedBitmapDrawable roundImg1= RoundedBitmapDrawableFactory.create(getResources(),bitmap2);
-        roundImg1.setAntiAlias(true);
-        roundImg1.setCornerRadius(bitmap2.getWidth()/2);
-        imageView_tx.setImageDrawable(roundImg1);
+        if(MainActivity.person.getAvatar().equals("")){
+            if(MainActivity.person.getGender().equals("女")){
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.woman);
+                Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+                imageView_tx.setImageBitmap(bitmap1);
+            }else{
+                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.man);
+                Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+                imageView_tx.setImageBitmap(bitmap1);
+            }
+        }else{
+
+            Bitmap bitmap = ImageHandle.stringToBitmap(MainActivity.person.getAvatar());
+            //Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+            imageView_tx.setImageBitmap(bitmap);
+        }
+
     }
 
     private void initFrag() {
@@ -99,13 +98,6 @@ public class ChangeAvatarActivity extends AppCompatActivity {
         //设置对话框大小
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.show();
-        dialog.findViewById(R.id.bottom_tv_look).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
-        });
 
         dialog.findViewById(R.id.bottom_tv_open).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,13 +108,21 @@ public class ChangeAvatarActivity extends AppCompatActivity {
                             @Override
                             public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
                                 //获取file,进行对应操作
-                                File file = new File(photos.get(0).path);
-
+                                try {
+                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photos.get(0).uri);
+                                    Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+                                    bitmap1= ImageHandle.rotateBimap(ChangeAvatarActivity.this,90,bitmap1);
+                                    MainActivity.person.setAvatar(ImageHandle.getImageStr(bitmap1));
+                                    imageView_tx.setImageBitmap(bitmap1);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
                             @Override
                             public void onCancel() {
                             }
                         });
+                dialog.dismiss();
             }
         });
 
@@ -133,9 +133,17 @@ public class ChangeAvatarActivity extends AppCompatActivity {
                         .setFileProviderAuthority("com.jnu.booktrace")
                         .start(new SelectCallback() {
                             @Override
-                            public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
+                            public void onResult(ArrayList<Photo> photos, boolean isOriginal) { //将拍照得到的照片保存到本地
                                 //获取file,进行对应操作
-                                File file = new File(photos.get(0).path);
+                                try {
+                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photos.get(0).uri);
+                                    Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+                                    bitmap1= ImageHandle.rotateBimap(ChangeAvatarActivity.this,90,bitmap1);
+                                    MainActivity.person.setAvatar(ImageHandle.getImageStr(bitmap1));
+                                    imageView_tx.setImageBitmap(bitmap1);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             }
 
                             @Override
@@ -143,6 +151,7 @@ public class ChangeAvatarActivity extends AppCompatActivity {
 
                             }
                         });
+                dialog.dismiss();
             }
         });
 

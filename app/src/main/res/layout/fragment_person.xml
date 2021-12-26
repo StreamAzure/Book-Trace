@@ -41,7 +41,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:background="@drawable/ic_launcher_background"/>
+            android:background="@drawable/man"/>
 
         <TextView
             android:id="@+id/person_tv_name"
