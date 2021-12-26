@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -32,6 +33,7 @@ import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
+import com.jnu.booktrace.utils.AndroidBarUtils;
 import com.mysql.jdbc.MiniAdmin;
 
 import java.text.SimpleDateFormat;
@@ -54,6 +56,12 @@ public class PersonInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_info);
         intent = getIntent();
+
+        //状态栏颜色更改
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //注意要清除 FLAG_TRANSLUCENT_STATUS flag
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        AndroidBarUtils.setBarDarkMode(this,true); //状态栏文字图标颜色为黑色
 
         ActionBar actionBar = getSupportActionBar();     //隐藏自带的标题栏
         if(actionBar!=null){

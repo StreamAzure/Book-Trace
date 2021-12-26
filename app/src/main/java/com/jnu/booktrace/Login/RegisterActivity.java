@@ -33,7 +33,7 @@ import java.util.concurrent.CountDownLatch;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
     private static int USER_EXIT=1, USER_NOEXIT=0;
     private EditText register_name,register_password,register_password2;
-    private Button register_confirm, register_cancel;
+    private Button register_confirm;
     private Handler handler;
     private Boolean userExist=true, JudgeFinish=false;
     private LinearLayout processbar;
@@ -46,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         initComp();  //初始化控件
         //设置按钮监听事件
         register_confirm.setOnClickListener(this);
-        register_cancel.setOnClickListener(this);
 
     }
 
@@ -56,7 +55,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         register_password = findViewById(R.id.register_password);
         register_password2 = findViewById(R.id.register_password2);
         register_confirm = findViewById(R.id.register_confirm);
-        register_cancel = findViewById(R.id.register_cancel);
         processbar = findViewById(R.id.register_processBar);
     }
 
@@ -65,9 +63,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()){
             case R.id.register_confirm:   //注册按钮
                 Confirm();
-                break;
-            case R.id.register_cancel:   //取消按钮,直接返回
-                finish();
                 break;
         }
     }
@@ -78,12 +73,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         name = register_name.getText().toString();
         password = register_password.getText().toString();
         password2 = register_password2.getText().toString();
-        if(!name.equals("") && !password.equals("") && !password2.equals("")){
+        if(name.equals("")||password.equals("")||password2.equals("")){
+            Toast.makeText(RegisterActivity.this,"请输入完整的信息",Toast.LENGTH_SHORT).show();
+        }
+        else{
             if(!password.equals(password2)){//判断两次输入的密码是否一致
                 Toast.makeText(RegisterActivity.this,"两次输入的密码不一致，请重新输入",
                         Toast.LENGTH_SHORT).show();
             } else{//判断现在添加的用户是否以及存在，不存在则添加
                 processbar.setVisibility(View.VISIBLE);
+
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -126,10 +125,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     register_password2.setText("");
                 }
             }
-        }else {
-            Toast.makeText(RegisterActivity.this,"请输入完整的信息",Toast.LENGTH_SHORT).show();
         }
     }
-
-
 }

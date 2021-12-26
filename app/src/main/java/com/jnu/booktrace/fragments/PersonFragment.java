@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jnu.booktrace.MainActivity;
@@ -30,7 +31,7 @@ import com.jnu.booktrace.person.PersonInfoActivity;
 public class PersonFragment extends Fragment implements View.OnClickListener {
     private TextView person_tv_name, person_tv_description;
     private ImageView person_iv_avatar;
-    private ImageView person_bt_person, person_bt_drift,person_bt_topic,person_bt_collect;
+    private LinearLayout person_bt_person, person_bt_drift,person_bt_topic,person_bt_collect;
     private Toolbar toolbar;
 
     @Override
