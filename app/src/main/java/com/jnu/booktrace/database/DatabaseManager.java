@@ -280,16 +280,16 @@ public class DatabaseManager {
         return count >= 0;
     }
 
-    public static List<Drift> GetDrift(){
+    public static List<Drift> GetDriftById(int author_id){
         List<Drift> drifts = new ArrayList<>();
         try {
             connection = DBUtil.getConnection();
-            sql = "select * from drifttb";
+            sql = "select * from drifttb where author_id = ?";
             preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1,author_id);
             result = preparedStatement.executeQuery();
             while(result.next()){
                 int id = result.getInt("id");
-                int author_id = result.getInt("author_id");
                 String time = result.getString("time");
                 String title = result.getString("title");
                 String book_author =result.getString("book_author");
@@ -303,4 +303,9 @@ public class DatabaseManager {
         }
         return drifts;
     }
+
+//    public static Drift GetOneDriftByRandom(){
+//
+//    }
+
 }

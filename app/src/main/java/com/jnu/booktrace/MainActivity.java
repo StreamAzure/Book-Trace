@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
 import com.jnu.booktrace.fragments.DriftFragment;
 import com.jnu.booktrace.fragments.FreeTalkFragment;
@@ -53,11 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                person = DatabaseManager.getPersonFromName(name);
-                //判断本地数据库中表是否为空，为空则与远程同步建表
-//                if(!isUserBookExist(name)){
-//
-//                }
+                person = DBManager.getPersonFromName(name);
+                //if();
             }
         });
         thread.start();
