@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private TextView person_tv_name, person_tv_description;
     private ImageView person_iv_avatar;
     private ImageView person_bt_person, person_bt_drift,person_bt_topic,person_bt_collect;
+    private Toolbar toolbar;
 
     @Override
     public void onResume() {
@@ -47,7 +50,17 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         initFrag(view); //绑定组件
         setTopName();  //设置头顶姓名和个人描述
         setButtonClick(); //设置imageButton监听
+        initToolbar(view);
         return view;
+    }
+
+    private void initToolbar(View v){
+        //获取toolbar
+        toolbar = v.findViewById(R.id.toolbar);
+        //主标题，必须在setSupportActionBar之前设置，否则无效，如果放在其他位置，则直接setTitle即可
+        toolbar.setTitle("");
+        //用toolbar替换actionbar
+        //getActivity().setSupportActionBar(toolbar);
     }
 
     private void setButtonClick() {

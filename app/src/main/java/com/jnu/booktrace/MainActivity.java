@@ -1,20 +1,17 @@
 package com.jnu.booktrace;
 
-import static com.jnu.booktrace.database.DBManager.initDB;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -25,6 +22,7 @@ import com.jnu.booktrace.fragments.DriftFragment;
 import com.jnu.booktrace.fragments.FreeTalkFragment;
 import com.jnu.booktrace.fragments.LibraryFragment;
 import com.jnu.booktrace.fragments.PersonFragment;
+import com.jnu.booktrace.utils.AndroidBarUtils;
 
 import java.util.List;
 
@@ -45,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //状态栏颜色更改
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //注意要清除 FLAG_TRANSLUCENT_STATUS flag
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        AndroidBarUtils.setBarDarkMode(this,true); //状态栏文字图标颜色为黑色
+
         intent = getIntent();
         name = intent.getStringExtra("name");
         Thread thread = new Thread(new Runnable() {

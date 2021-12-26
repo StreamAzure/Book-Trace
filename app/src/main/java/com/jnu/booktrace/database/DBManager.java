@@ -7,12 +7,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.ArrayAdapter;
 
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Drift;
 import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.bean.Review;
 
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,7 +134,11 @@ public class DBManager {
         db.insert("booktb",null,contentValues);
     }
 
-    //判断isbn号对应的书籍是否在数据库中
+    /**
+     * 根据isbn号查看书籍是否存在本地数据库中
+     * @param isbn-书的isbn号
+     * @return true-存在 false-不存在
+     */
     public static Boolean isBookExist(String isbn){
         String sql = "select * from booktb where isbn = ?";
         Cursor cursor = db.rawQuery(sql,new String[]{isbn});
@@ -138,27 +146,34 @@ public class DBManager {
         return !cursor.isAfterLast();
     }
 
-    //根据isbn号获取Book对象
+    /**
+     * 判断书籍是否在本地数据库中，若存在，根据isbn号查询书籍信息
+     * @param isbn-书籍ISBN号
+     * @return 返回Book对象（已new）;若数据不存在，Book对象为null
+     */
     public static Book QueryBook(String isbn){
-        String sql = "select * from booktb where isbn = ?";
-        Cursor cursor = db.rawQuery(sql,new String[]{isbn});
-        cursor.moveToFirst();
         Book book = new Book();
-        book.setId(cursor.getString(0));
-        book.setIsbn10(cursor.getString(0));
-        book.setTitle(cursor.getString(1));
-        book.setImage(cursor.getString(2));
-        book.setAuthor(cursor.getString(3));
-        book.setTranslator(cursor.getString(4));
-        book.setPublisher(cursor.getString(5));
-        book.setPubdate(cursor.getString(6));
-        book.setTags(cursor.getString(7));
-        book.setBinding(cursor.getString(8));
-        book.setPrice(cursor.getString(9));
-        book.setPages(cursor.getInt(10));
-        book.setAuthor_intro(cursor.getString(11));
-        book.setSummary(cursor.getString(12));
-        cursor.close();
+        if(isBookExist(isbn)) {
+            String sql = "select * from booktb where isbn = ?";
+            Cursor cursor = db.rawQuery(sql, new String[]{isbn});
+            cursor.moveToFirst();
+
+            book.setId(cursor.getString(0));
+            book.setIsbn10(cursor.getString(0));
+            book.setTitle(cursor.getString(1));
+            book.setImage(cursor.getString(2));
+            book.setAuthor(cursor.getString(3));
+            book.setTranslator(cursor.getString(4));
+            book.setPublisher(cursor.getString(5));
+            book.setPubdate(cursor.getString(6));
+            book.setTags(cursor.getString(7));
+            book.setBinding(cursor.getString(8));
+            book.setPrice(cursor.getString(9));
+            book.setPages(cursor.getString(10));
+            book.setAuthor_intro(cursor.getString(11));
+            book.setSummary(cursor.getString(12));
+            cursor.close();
+        }
         return book;
     }
 
@@ -210,4 +225,91 @@ public class DBManager {
         db.insert("drifttb",null,contentValues);
     }
 
+
+    /**
+     * 判断本地数据库中的user-book表是否有指定用户的书籍数据
+     * @param username 用户名
+     * @return true-至少有一条；false-一条都没有
+     */
+    public static boolean isUserBookExist(String username){
+        String sql = "select * from userbooktb where username =?";
+        Cursor cursor = db.rawQuery(sql, new String[]{username});
+        cursor.moveToFirst();
+        return !cursor.isAfterLast();
+    }
+
+    /**
+     * 先判断本地数据库是否有用户的书籍数据，再查找书籍
+     * @param username 用户名
+     * @return HashMap（已new），key为书架名，value为该书架下的书籍列表（仅ISBN号）
+     */
+    public static HashMap<String, ArrayList<String>> QueryUserBooks(String username){
+        HashMap<String, ArrayList<String>> hashMap = new HashMap();
+        if(isUserBookExist(username)){
+            ArrayList<String> bookshelfs = new ArrayList<>(); //书架名列表
+            String sql = "select bookshelf from userbooktb where username = ?";
+            Cursor bookshelfCursor = db.rawQuery(sql, new String[]{username});
+            bookshelfCursor.moveToFirst();
+            while(bookshelfCursor.moveToNext()){
+                bookshelfs.add(bookshelfCursor.getString(0)); //TODO：是这样吗？
+            }
+            bookshelfCursor.close();
+
+            for(int i = 0; i<bookshelfs.size(); i++){
+                String bookshelf = bookshelfs.get(i);
+                ArrayList<String> arrayList = new ArrayList<>();
+                sql = "select book from userbooktb where username = ? and bookshelf = ?";
+                Cursor cursor = db.rawQuery(sql, new String[]{username,bookshelf});
+                cursor.moveToFirst();
+                while(cursor.moveToNext()){
+                    arrayList.add(cursor.getString(0));
+                }
+                cursor.close();
+                hashMap.put(bookshelf,arrayList);
+            }
+        }
+        return hashMap;
+    }
+
+    /**
+     * 将一条 用户名-书籍ISBN-书架名 数据插入到本地数据库中，该数据可来自远程服务器，也可来自Android客户端
+     * 注意：判重应在客户端调用本方法前预先完成，本方法不保证数据唯一
+     * @param username-用户名
+     * @param isbn-书籍ISBN号
+     * @param bookshelf-书架名
+     */
+    public static void insertUserBooktb(String username, String isbn, String bookshelf){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("username",username);
+        contentValues.put("bookisbn",isbn);
+        contentValues.put("bookshelf",bookshelf);
+        db.insert("userbooktb",null,contentValues);
+    }
+
+    //根据isbn号获取书籍的书评
+    public static Review QueryReview(String isbn){
+        String sql = "select * from reviewtb where isbn = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{isbn});
+        cursor.moveToFirst();
+        Review review = new Review(
+            cursor.getInt(1),
+            cursor.getString(2),
+            cursor.getString(3),
+            cursor.getInt(4),
+            cursor.getInt(5)
+        );
+        cursor.close();
+        return review;
+    }
+
+    //将一条review对象插入表
+    public static void insertReviewtb(Review review){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("userid",review.getUserId());
+        contentValues.put("bookisbn",review.getBookIsbn());
+        contentValues.put("content",review.getContent());
+        contentValues.put("likecount",review.getLikeCount());
+        contentValues.put("mark",review.getMark());
+        db.insert("reviewtb",null,contentValues);
+    }
 }

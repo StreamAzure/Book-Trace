@@ -1,5 +1,7 @@
 package com.jnu.booktrace.utils;
 
+import static com.jnu.booktrace.database.DBManager.insertBooktb;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.jnu.booktrace.bean.Book;
+import com.jnu.booktrace.database.DBManager;
 
 import org.json.JSONObject;
 
@@ -34,22 +37,31 @@ public class ISBNApiUtil {
                     Message message = new Message();
                     String ISBNRequest = "https://api.jike.xyz/situ/book/isbn/"+ISBN+"?apikey="+apikey;
 
-                    Log.e("MYTAG", ISBNRequest);
+//                    Log.e("MYTAG", ISBNRequest);
                     String resultJson = download(ISBNRequest);
-                    Log.e("MYTAG", resultJson);
+//                    Log.e("MYTAG", resultJson);
 
                     //不要发送Message，一收到响应立即解析并赋值，否则来不及赋值，主线程那边发现NULL会报错！
                     if(parsonJson(resultJson, book)){
-                        Log.e("MYTAG",book.getTitle());
-                        Log.e("MYTAG",book.getImage());
+//                        Log.e("MYTAG",book.getTitle());
+//                        Log.e("MYTAG",book.getImage());
                     }
-
                 }catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         };
-        new Thread(runnable).start();//线程启动读取网络数据
+        Thread thread = new Thread(runnable);//线程启动读取网络数据
+        thread.start();
+        while(true) {
+            try {
+                thread.join(); //必须等待这个线程结束
+                break;
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        insertBooktb(book);
         return book;
     }
 
@@ -86,7 +98,6 @@ public class ISBNApiUtil {
         try {
             JSONObject result = new JSONObject(strJson);
             String status = result.getString("msg");
-            //TODO：还没处理API“请求成功”以外的情况，只是单纯地返回false
             if(status.equals("请求成功")){
                 JSONObject bookInfo = new JSONObject(result.getString("data"));
                 book.setId(bookInfo.getString("id"));
@@ -94,14 +105,30 @@ public class ISBNApiUtil {
                 book.setTitle(bookInfo.getString("name"));
                 book.setImage(bookInfo.getString("photoUrl"));
                 book.setAuthor(bookInfo.getString("author"));
-                book.setTranslator(bookInfo.getString("translator"));
-                book.setPublisher(bookInfo.getString("publishing"));
-                book.setPubdate(bookInfo.getString("published"));
-                book.setPrice(bookInfo.getString("price"));
-                book.setPages(bookInfo.getInt("pages"));
-                book.setAuthor_intro(bookInfo.getString("authorIntro"));
-                book.setSummary(bookInfo.getString("description"));
-                book.setBinding(bookInfo.getString("designed"));
+                if(isValid(bookInfo.getString("translator"))) {
+                    book.setTranslator(bookInfo.getString("translator"));
+                }
+                if(isValid(bookInfo.getString("publishing"))){
+                    book.setPublisher(bookInfo.getString("publishing"));
+                }
+                if(isValid(bookInfo.getString("published"))) {
+                    book.setPubdate(bookInfo.getString("published"));
+                }
+                if(isValid(bookInfo.getString("price"))) {
+                    book.setPrice(bookInfo.getString("price"));
+                }
+                if(isValid(bookInfo.getString("pages"))) {
+                    book.setPages(bookInfo.getString("pages"));
+                }
+                if(isValid(bookInfo.getString("authorIntro"))) {
+                    book.setAuthor_intro(bookInfo.getString("authorIntro"));
+                }
+                if(isValid(bookInfo.getString("description"))) {
+                    book.setSummary(bookInfo.getString("description"));
+                }
+                if(isValid(bookInfo.getString("designed"))) {
+                    book.setBinding(bookInfo.getString("designed"));
+                }
 
                 return true;
             }
@@ -111,43 +138,15 @@ public class ISBNApiUtil {
         return false;
     }
 
-
     /**
-     * @description 新开一个线程从URL加载到bitmap
+     * 判断JSON字符串中的值是否正常
+     * @param string 解析后的某一项的值
+     * @return
      */
-    public void loadImageFromURL(Book book){
-        URL imgURL = null;
-        try {
-            imgURL = new URL(book.getImage());
-        }catch (Exception e){
-            e.printStackTrace();
+    private boolean isValid(String string){
+        if(string.equals("")){
+            return false;
         }
-        URL finalImgURL = imgURL;
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection connection = (HttpURLConnection) finalImgURL.openConnection();
-                    connection.setDoInput(true);
-                    connection.setConnectTimeout(600);
-                    connection.setUseCaches(false);
-                    connection.connect();
-                    InputStream inputStream = connection.getInputStream();
-                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    book.setImage_bitmap(bitmap);
-//                    Message message = Message.obtain();//从线程池里获取，避免new太多
-//                    message.what = WHAT_LOAD_IMAGE_OK;
-//                    message.obj = bitmap;
-//                    handler.sendMessage(message);
-                    inputStream.close();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        new Thread(runnable).start();//线程启动读取网络数据
+        else return true;
     }
 }

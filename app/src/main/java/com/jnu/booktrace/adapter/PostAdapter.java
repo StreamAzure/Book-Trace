@@ -1,6 +1,7 @@
 package com.jnu.booktrace.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
+import com.jnu.booktrace.activity.FreeTalkPostActivity;
+import com.jnu.booktrace.activity.FreeTalkTopicActivity;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Post;
 
@@ -48,6 +51,13 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         postHolder.btnRelativeTopic.setText(post.getRelativeTopic());
         postHolder.btnReply.setText(post.getReplyCount()+"");
         postHolder.btnLike.setText(post.getLikeCount()+"");
+        postHolder.rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FreeTalkPostActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -56,12 +66,14 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class PostHolder extends RecyclerView.ViewHolder{
+        View rootView;
         ImageView ivAvatar;
         TextView tvUsername, tvContent, tvDate;
         Button btnReply, btnLike, btnRelativeTopic;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
+            rootView = itemView.findViewById(R.id.item_post_root_view);
             ivAvatar = itemView.findViewById(R.id.iv_item_post_avatar);
             tvUsername = itemView.findViewById(R.id.tv_item_post_username);
             tvContent = itemView.findViewById(R.id.tv_item_post_content);

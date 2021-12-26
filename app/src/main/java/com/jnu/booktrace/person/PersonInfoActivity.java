@@ -3,6 +3,7 @@ package com.jnu.booktrace.person;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -46,7 +47,8 @@ import java.util.List;
 public class PersonInfoActivity extends AppCompatActivity {
     private TextView gender, birth, nickname,description;
     private Intent intent;
-    private Button leave;
+    private Button changePassword, leave;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +61,7 @@ public class PersonInfoActivity extends AppCompatActivity {
         }
         initFrag();
         setListener();
+        initToolbar();
     }
 
     //重写返回事件，返回更新数据库
@@ -78,10 +81,37 @@ public class PersonInfoActivity extends AppCompatActivity {
         description = findViewById(R.id.person_info_tv_description2);
         description.setText(MainActivity.person.getDescription());
         leave = findViewById(R.id.person_info_bt_leave);
+        changePassword = findViewById(R.id.person_info_change_password);
     }
+
+    private void initToolbar(){
+        //隐藏默认actionbar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
+
+        //获取toolbar
+        toolbar = findViewById(R.id.toolbar);
+//        //主标题，必须在setSupportActionBar之前设置，否则无效，如果放在其他位置，则直接setTitle即可
+        toolbar.setTitle("个人资料");
+        //用toolbar替换actionbar
+        setSupportActionBar(toolbar);
+        //左侧按钮：可见+更换图标+点击监听
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//显示toolbar的返回按钮
+        //toolBar.setNavigationIcon(R.mipmap.back_white);
+        //返回键功能点击事件在这
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updatePerson();
+                finish();
+            }
+        });
+    }
+
     private void setListener() {
         nickname.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -92,9 +122,35 @@ public class PersonInfoActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!nickname.getText().toString().equals(MainActivity.person.getNickName())){
+                if (!nickname.getText().toString().equals(MainActivity.person.getNickName())) {
                     MainActivity.person.setNickName(nickname.getText().toString());
                 }
+            }
+        });
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDescriptionDialog();
+            }
+        });
+        gender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showGenderDialog();
+            }
+        });
+        birth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBirthDialog();
+            }
+        });
+
+        changePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(PersonInfoActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
             }
         });
         leave.setOnClickListener(new View.OnClickListener() {
@@ -102,37 +158,11 @@ public class PersonInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DBManager.deletePersontb(); // 删除用户数据
                 Intent intent = new Intent(PersonInfoActivity.this, LoginActivity.class);
-                Toast.makeText(PersonInfoActivity.this,"退出登录成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(PersonInfoActivity.this, "退出登录成功", Toast.LENGTH_SHORT).show();
                 startActivity(intent);
                 finish();
             }
         });
-    }
-
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.person_info_back:
-                updatePerson();
-                finish();
-                break;
-            case R.id.person_info_rl_avatar:
-                intent = new Intent(this,ChangeAvatarActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.person_info_rl_gender:
-                showGenderDialog();
-                break;
-            case R.id.person_info_rl_birth:
-                showBirthDialog();
-                break;
-            case R.id.person_info_rl_description:
-                showDescriptionDialog();
-                break;
-            case R.id.person_info_rl_password:
-                intent = new Intent(this,ChangePasswordActivity.class);
-                startActivity(intent);
-                break;
-        }
     }
 
     //更新个人数据
@@ -144,14 +174,15 @@ public class PersonInfoActivity extends AppCompatActivity {
             }
         });
         thread.start();
-        while (true){
-            try {
-                thread.join();
-                break;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        //明显卡顿感，不等了
+//        while (true){
+//            try {
+//                thread.join();
+//                break;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     //选择性别对话框

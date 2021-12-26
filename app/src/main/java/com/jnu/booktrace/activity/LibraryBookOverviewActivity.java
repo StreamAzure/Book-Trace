@@ -3,12 +3,11 @@ package com.jnu.booktrace.activity;
 import static com.jnu.booktrace.database.DBManager.QueryBook;
 import static com.jnu.booktrace.database.DBManager.isBookExist;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.TagInfo;
+import com.jnu.booktrace.utils.ISBNApiUtil;
 import com.jnu.booktrace.utils.ImageUtil;
 
 import java.util.ArrayList;
@@ -37,43 +37,23 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_book_overview);
+        setContentView(R.layout.activity_library_book_overview);
 
         initData();
         initRecyclerView();
     }
 
     private void initData() {
+        //预先加载三本书，方便调试
+        String[] isbn={"9787020024759","9787505352377","9787040195835","9787544210966","9787544211765"};
         mBookList = new ArrayList<>();
-        if(isBookExist("9787020024759")) {
-            Book book = QueryBook("9787020024759");
-            mBookList.add(book);
+        for(int i = 0; i < isbn.length; i++){
+            Book book = new Book();
+            if(!isBookExist(isbn[i])){ //如果数据库中没有则请求，请求完了加入到（本地）数据库
+                new ISBNApiUtil().getBookFromISBN(book, isbn[i]);
+            }
+            mBookList.add(QueryBook(isbn[i]));
         }
-        if(isBookExist("9787040195835")){
-            Book book = QueryBook("9787040195835");
-            mBookList.add(book);
-        }
-        if(isBookExist("9787505352377")){
-            Book book = QueryBook("9787505352377");
-            mBookList.add(book);
-        }
-//        Log.e("bookExist", isBookExist("9787020024759")+" 9787020024759");
-//        Log.e("bookExist", isBookExist("9787040195835")+" 9787040195835");
-//        Log.e("bookExist", isBookExist("9787505352377")+" 9787505352377");
-//        isbnApiUtil.getBookFromISBN(book1, "9787020024759");
-//        isbnApiUtil.getBookFromISBN(book2,"9787040195835");
-//        isbnApiUtil.getBookFromISBN(book3,"9787505352377");
-//        try {
-//            sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        insertBooktb(book1);
-//        insertBooktb(book2);
-//        insertBooktb(book3);
-//        mBookList.add(book1);
-//        mBookList.add(book2);
-//        mBookList.add(book3);
     }
 
     private void initRecyclerView(){
@@ -136,6 +116,18 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
                     }
                 });
             }
+
+            /**
+             * 书籍项的点击事件，跳转至详情页
+             */
+            bookHolder.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, LibraryBookDetailActivity.class);
+                    intent.putExtra("book",(Parcelable)book);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
@@ -144,10 +136,12 @@ public class LibraryBookOverviewActivity extends AppCompatActivity {
         }
 
         class BookHolder extends RecyclerView.ViewHolder{
+            View rootView;
             ImageView ivImage;
             TextView tvTitle,tvAuthor,tvAbstract,tvBookShelf;
             public BookHolder(@NonNull View itemView) {
                 super(itemView);
+                rootView = itemView.findViewById(R.id.item_book_root_view);
                 ivImage = itemView.findViewById(R.id.iv_item_book_image);
                 tvTitle = itemView.findViewById(R.id.tv_item_book_title);
                 tvAuthor = itemView.findViewById(R.id.tv_item_book_author);

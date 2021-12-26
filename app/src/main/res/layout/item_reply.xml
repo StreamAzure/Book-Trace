@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/item_reply_root_view"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--回帖人头像-->
+    <ImageView
+        android:id="@+id/iv_item_reply_avatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <!--回帖人昵称-->
+    <TextView
+        android:id="@+id/tv_item_reply_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="用户名"
+        app:layout_constraintBottom_toTopOf="@id/tv_item_reply_content"
+        app:layout_constraintLeft_toRightOf="@id/iv_item_reply_avatar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!--回帖内容-->
+    <TextView
+        android:id="@+id/tv_item_reply_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本测试文本"
+        app:layout_constraintTop_toBottomOf="@id/iv_item_reply_avatar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <!--回帖日期-->
+    <TextView
+        android:id="@+id/tv_item_reply_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2019-05-10"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_reply_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+    <!--点赞按钮-->
+    <Button
+        android:id="@+id/btn_item_reply_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_item_reply_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,8 @@
 package com.jnu.booktrace.person;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.View;
@@ -14,11 +16,13 @@ import com.jnu.booktrace.R;
 public class ChangePasswordActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText old_password, new_password, new_password2;
     private Button confirm,cancel;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
         initFrag();
+        initToolbar();
     }
 
     private void initFrag() {
@@ -29,6 +33,30 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         cancel = findViewById(R.id.change_password_cancel);
         confirm.setOnClickListener(this);
         cancel.setOnClickListener(this);
+    }
+
+    private void initToolbar(){
+        //隐藏默认actionbar
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.hide();
+        }
+
+        //获取toolbar
+        toolbar = findViewById(R.id.toolbar);
+//        //主标题，必须在setSupportActionBar之前设置，否则无效，如果放在其他位置，则直接setTitle即可
+        toolbar.setTitle("修改密码");
+        //用toolbar替换actionbar
+        setSupportActionBar(toolbar);
+        //左侧按钮：可见+更换图标+点击监听
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);//显示toolbar的返回按钮
+        //toolBar.setNavigationIcon(R.mipmap.back_white);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     @Override
