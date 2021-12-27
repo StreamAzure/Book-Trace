@@ -24,6 +24,7 @@ import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
+import com.jnu.booktrace.filehandle.FileHandle;
 import com.jnu.booktrace.imagehandle.ImageHandle;
 import com.jnu.booktrace.person.PersonInfoActivity;
 
@@ -38,14 +39,25 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         setTopName();
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                DatabaseManager.updatePersontb(MainActivity.person);
-//            }
-//        });
-//        thread.start();
-//
+        String avatar = FileHandle.ReadFromFile("avatar.txt");
+        if(avatar.equals("")){
+            if(MainActivity.person.getGender().equals("女")){
+                person_iv_avatar.setImageResource(R.drawable.woman);
+            }else {
+                person_iv_avatar.setImageResource(R.drawable.man);
+            }
+        }else{
+            person_iv_avatar.setImageBitmap(ImageHandle.stringToBitmap(avatar));
+        }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                DatabaseManager.updatePersontb(MainActivity.person);
+                DBManager.updatePersontb(MainActivity.person);
+            }
+        });
+        thread.start();
+
 //        while (true){
 //            try {
 //                thread.join();
@@ -108,6 +120,17 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 //            }
 //        }else{
 //           person_iv_avatar.setImageBitmap(ImageHandle.stringToBitmap(MainActivity.person.getAvatar()));
+//        }
+        //设置头像
+        String avatar = FileHandle.ReadFromFile("avatar.txt");
+//        if(avatar.equals("")){
+//            if(MainActivity.person.getGender().equals("女")){
+//                person_iv_avatar.setImageResource(R.drawable.woman);
+//            }else {
+//                person_iv_avatar.setImageResource(R.drawable.man);
+//            }
+//        }else{
+//           person_iv_avatar.setImageBitmap(ImageHandle.stringToBitmap(avatar));
 //        }
 
 //        Bitmap bitmap = BitmapFactory.decodeFile(MainActivity.person.getAvatar());

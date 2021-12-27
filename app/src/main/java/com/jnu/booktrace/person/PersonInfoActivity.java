@@ -76,7 +76,7 @@ public class PersonInfoActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        updatePerson();
+        //updatePerson();
     }
 
     private void initFrag() {
@@ -112,7 +112,7 @@ public class PersonInfoActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updatePerson();
+                //updatePerson();
                 finish();
             }
         });
@@ -174,25 +174,25 @@ public class PersonInfoActivity extends AppCompatActivity {
     }
 
     //更新个人数据
-    private void updatePerson(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DatabaseManager.updatePersontb(MainActivity.person);
-
-            }
-        });
-        thread.start();
-        //明显卡顿感，不等了
-        while (true){
-            try {
-                thread.join();
-                break;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void updatePerson(){
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                DatabaseManager.updatePersontb(MainActivity.person);
+//
+//            }
+//        });
+//        thread.start();
+//        //明显卡顿感，不等了
+//        while (true){
+//            try {
+//                thread.join();
+//                break;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     //选择性别对话框
     private void showGenderDialog(){

@@ -74,7 +74,7 @@ public class DBManager {
         person.setGender(cursor.getString(cursor.getColumnIndex("gender")));
         person.setBirth(cursor.getString(cursor.getColumnIndex("birth")));
         person.setDescription(cursor.getString(cursor.getColumnIndex("description")));
-        person.setAvatar(cursor.getString(cursor.getColumnIndex("avatar")));
+
         return person;
     }
     /*
@@ -89,7 +89,6 @@ public class DBManager {
         contentValues.put("gender",person.getGender());
         contentValues.put("birth",person.getBirth());
         contentValues.put("description",person.getDescription());
-        contentValues.put("avatar",person.getAvatar());
         db.insert("persontb",null,contentValues);
     }
     /*
@@ -107,6 +106,20 @@ public class DBManager {
         if(result==1) return true;
         else return false;
     }
+    /*
+    * 更新本地用户表
+     */
+    public static void updatePersontb(Person person){
+        ContentValues values = new ContentValues();
+        values.put("password",person.getPassword());
+        values.put("nickname",person.getNickName());
+        values.put("gender",person.getGender());
+        values.put("birth",person.getBirth());
+        values.put("description",person.getDescription());
+        db.update("persontb",values,"name=?",new String[]{person.getName()});
+
+    }
+
 
     /*
     * 根据用户名删除用户表中的用户

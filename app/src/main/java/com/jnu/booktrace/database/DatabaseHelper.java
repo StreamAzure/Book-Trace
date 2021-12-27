@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //个人中心：用户信息表
         String sqlCreatePersonTable = "create table persontb (id integer primary key, name varchar(25) not null unique, " +
-                "password varchar(50) not null, nickname varchar(20),gender varchar(10),birth varchar(20), description text,avatar text)";
+                "password varchar(50) not null, nickname varchar(20),gender varchar(10),birth varchar(20), description text)";
 
         //个人图书馆：书籍基本信息总表，ISBN号作为主键
         //0.ISBN号，1.标题，2.封面url，3.作者，4.译者，5.出版社，6.出版时间，7.分类/标签，8.精装/平装，9.定价（xx.xx元），10.页数，11.作者简介，12.书籍简介

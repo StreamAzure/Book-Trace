@@ -57,20 +57,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //每次更新drift数据库
-                List<Drift> drifts = DatabaseManager.GetDrift();
-                DBManager.UpdateDrift(drifts);
                 //if();
             }
         });
         thread.start();
-        while(true){
-            try {
-                thread.join();
-                break;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+
         initFragment(); //将底部导航栏各按钮与对应Fragment绑定
         myRequestPermission(); //权限请求
     }
