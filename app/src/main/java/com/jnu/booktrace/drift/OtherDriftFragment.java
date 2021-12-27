@@ -18,7 +18,7 @@ public class OtherDriftFragment extends BaseDriftFragment {
 
     @Override
     public void loadDatas() {
-        setmDatas(DBManager.GetOtherDrift(MainActivity.person.getId()));
+        setmDatas(DBManager.GetOtherDrift(MainActivity.person.getName()));
     }
 
 }

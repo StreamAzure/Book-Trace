@@ -214,43 +214,47 @@ public class DBManager {
         for(Drift drift:drifts){
             ContentValues contentValues = new ContentValues();
             contentValues.put("id",drift.getId());
-            contentValues.put("author_id",drift.getAuthor_id());
+            contentValues.put("author_name",drift.getAuthor_name());
             contentValues.put("time",drift.getTime());
             contentValues.put("title",drift.getTitle());
             contentValues.put("book_author",drift.getBook_Author());
+            contentValues.put("book_image",drift.getBook_image());
+
             contentValues.put("recommend",drift.getRecommend());
             db.insert("drifttb",null,contentValues);
         }
     }
     //获取根据用户名获取漂流瓶
-    public static List<Drift> GetOwnDriftById(int author_id){
+    public static List<Drift> GetOwnDriftById(String author_name){
         List<Drift> drifts = new ArrayList<>();
-        String sql = "select * from drifttb where author_id = ?";
-        Cursor cursor = db.rawQuery(sql, new String[]{author_id+""});
+        String sql = "select * from drifttb where author_name = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{author_name+""});
         while(cursor.moveToNext()){
             @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
             @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("time"));
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
             @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_author"));
             @SuppressLint("Range") String recommend = cursor.getString(cursor.getColumnIndex("recommend"));
-            Drift drift = new Drift(id, author_id, time, title,book_author,recommend);
+            Drift drift = new Drift(id, author_name, time, title,book_author,recommend);
             drifts.add(drift);
         }
         return drifts;
     }
 
     //获取得到的其他人的漂流瓶
-    public static List<Drift> GetOtherDrift(int author_id){
+    @SuppressLint("Range")
+    public static List<Drift> GetOtherDrift(String author_name){
         List<Drift> drifts = new ArrayList<>();
-        String sql = "select * from drifttb where author_id != ?";
-        Cursor cursor = db.rawQuery(sql, new String[]{author_id+""});
+        String sql = "select * from drifttb where author_name != ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{author_name+""});
         while(cursor.moveToNext()){
             @SuppressLint("Range") int id = cursor.getInt(cursor.getColumnIndex("id"));
+            author_name  = cursor.getString(cursor.getColumnIndex("author_name"));
             @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("time"));
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
             @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_author"));
             @SuppressLint("Range") String recommend = cursor.getString(cursor.getColumnIndex("recommend"));
-            Drift drift = new Drift(id, author_id, time, title,book_author,recommend);
+            Drift drift = new Drift(id, author_name, time, title,book_author,recommend);
             drifts.add(drift);
         }
         return drifts;
@@ -260,7 +264,8 @@ public class DBManager {
     public static void insertOneDriftToDrifttb(Drift drift){
         ContentValues contentValues = new ContentValues();
         contentValues.put("id",drift.getId());
-        contentValues.put("author_id",drift.getAuthor_id());
+        contentValues.put("author_id",drift.getAuthor_name());
+        contentValues.put("book_image",drift.getBook_image());
         contentValues.put("time",drift.getTime());
         contentValues.put("title",drift.getTitle());
         contentValues.put("book_author",drift.getBook_Author());

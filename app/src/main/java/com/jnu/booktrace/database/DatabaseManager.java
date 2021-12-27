@@ -298,12 +298,12 @@ public class DatabaseManager {
             result = preparedStatement.executeQuery();
             while(result.next()){
                 int id = result.getInt("id");
-                int author_id = result.getInt("author_id");
+                String author_name = result.getString("author_name");
                 String time = result.getString("time");
                 String title = result.getString("title");
                 String book_author =result.getString("book_author");
                 String recommend = result.getString("recommend");
-                Drift drift = new Drift(id,author_id,time,title,book_author,recommend);
+                Drift drift = new Drift(id,author_name,time,title,book_author,recommend);
                 drifts.add(drift);
             }
             connection.close();

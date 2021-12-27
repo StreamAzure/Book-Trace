@@ -18,7 +18,7 @@ public class OwnDriftFragment extends BaseDriftFragment {
 
     @Override
     public void loadDatas() {
-        setmDatas(DBManager.GetOwnDriftById(MainActivity.person.getId()));
+        setmDatas(DBManager.GetOwnDriftById(MainActivity.person.getName()));
         Log.i("用户id", MainActivity.person.getId()+"");
     }
 }
