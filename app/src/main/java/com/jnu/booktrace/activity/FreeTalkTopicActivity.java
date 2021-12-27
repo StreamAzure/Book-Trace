@@ -133,13 +133,14 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
 
     private void initData(){
         posts = new ArrayList<>();
-        posts.add(new Post("缄言","这是书店日记吗",topic.getTitle()));
-        posts.add(new Post("碎","哈哈哈哈书店四季？",topic.getTitle()));
-        posts.add(new Post("Shirley\uD83C\uDF6D","貌似手裡有書，心不慌！",topic.getTitle()));
-        posts.add(new Post("狗腿子","为猫仔来一通乱赞\uD83D\uDC4F",topic.getTitle()));
-        posts.add(new Post("冬妮娅","旁边的面包看着好好吃",topic.getTitle()));
-        posts.add(new Post("记忆中的夏天","我手中的书估计你不会想要",topic.getTitle()));
-        posts.add(new Post("悬铃木下","书店四季",topic.getTitle()));
-        posts.add(new Post("米小姐","哇，肉桂卷",topic.getTitle()));
+        posts.add(R.drawable.pic1,new Post("少女漫步世界","社恐是借口\n" +
+                "就是想要手里时时刻刻捧着书",topic.getTitle()));
+        posts.add(R.drawable.pic2,new Post("サボテン","《罪与罚》拉斯柯尔尼科夫。目前为止唯一和我没有交流障碍的人。",topic.getTitle()));
+        posts.add(R.drawable.pic3,new Post("花城出版社","你那么憎恨那些人，跟他们斗了那么久，最终却变得和他们一样。人世间没有任何理想值得以这样的沉沦为代价。",topic.getTitle()));
+        posts.add(R.drawable.pic4,new Post("Asuraa","一定是《飘》里的郝思嘉\uD83D\uDE0A当然不是那般美貌，而是即便世界坍塌，也有勇气和决心，白地重建的生命力。",topic.getTitle()));
+        posts.add(R.drawable.pic5,new Post("要下雨了","我惧怕自己不是美玉，因而刻意不去刻苦打磨；我又对自己会成为美玉尚存半分希望，因而也无法庸庸碌碌地与瓦砾为伍，我渐渐远离俗世，疏远世人，结果，愤懑、羞惭和愤恨渐渐滋长了我内心怯懦的自尊。",topic.getTitle()));
+        posts.add(R.drawable.pic6,new Post("！","我惧怕自己不是美玉，因而刻意不去刻苦打磨；我又对自己会成为美玉尚存半分希望，因而也无法庸庸碌碌地与瓦砾为伍，我渐渐远离俗世，疏远世人，结果，愤懑、羞惭和愤恨渐渐滋长了我内心怯懦的自尊。",topic.getTitle()));
+        posts.add(R.drawable.pic7,new Post("锋少","我惧怕自己不是美玉，因而刻意不去刻苦打磨；我又对自己会成为美玉尚存半分希望，因而也无法庸庸碌碌地与瓦砾为伍，我渐渐远离俗世，疏远世人，结果，愤懑、羞惭和愤恨渐渐滋长了我内心怯懦的自尊。",topic.getTitle()));
+        posts.add(R.drawable.pic8,new Post("V","我真的很想说是堂吉诃德，但是那么喜欢他的我，更像桑丘吧。",topic.getTitle()));
     }
 }
