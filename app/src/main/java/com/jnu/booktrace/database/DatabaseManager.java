@@ -2,16 +2,22 @@ package com.jnu.booktrace.database;
 
 import android.content.SyncRequest;
 import android.database.Cursor;
+import android.os.Message;
 import android.util.Log;
 
+import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
+import com.jnu.booktrace.bean.Drift;
 import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.filehandle.FileHandle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseManager {
     private static final String TAG = "DatabaseManager";
@@ -47,16 +53,17 @@ public class DatabaseManager {
         try {
             connection = DBUtil.getConnection();   //进行数据库连接
             statement = connection.createStatement();
-            sql = "insert into persontb (name,password, nickname,description,avatar) values (?,?,?,?,?)";
+            sql = "insert into persontb (name,password, nickname,gender,birth,description,avatar) values (?,?,?,?,?,?,?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,person.getName());
             preparedStatement.setString(2,person.getPassword());
             preparedStatement.setString(3,person.getNickName());
-            preparedStatement.setString(4,person.getDescription());
-            preparedStatement.setString(5,person.getAvatar());
+            preparedStatement.setString(4,person.getGender());
+            preparedStatement.setString(5,person.getBirth());
+            preparedStatement.setString(6,person.getDescription());
+            preparedStatement.setString(7,person.getAvatar());
             preparedStatement.executeUpdate();
             connection.close();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -130,13 +137,35 @@ public class DatabaseManager {
                 person.setName(name);
                 person.setPassword(result.getString("password"));
                 person.setNickName(result.getString("nickname"));
+                person.setGender(result.getString("gender"));
+                person.setBirth(result.getString("birth"));
                 person.setDescription(result.getString("description"));
-                person.setAvatar(result.getString("avatar"));
+                person.setAvatar(FileHandle.ReadFromFile("avatar.txt"));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return person;
+    }
+
+    public static void updatePersontb(Person person){
+        try {
+            connection = DBUtil.getConnection();   //进行数据库连接
+            sql = "update persontb set password = ? , nickname = ?, gender = ? ,birth = ?, description = ?, avatar = ? where id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1,person.getPassword());
+            preparedStatement.setString(2, person.getNickName());
+            preparedStatement.setString(3,person.getGender());
+            preparedStatement.setString(4,person.getBirth());
+            preparedStatement.setString(5,person.getDescription());
+            preparedStatement.setString(6, FileHandle.ReadFromFile("avatar.txt"));
+            preparedStatement.setInt(7,person.getId());
+            preparedStatement.executeUpdate();
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
     }
 
     /**
@@ -146,7 +175,6 @@ public class DatabaseManager {
     public static void insertBooktb(Book book){
         try {
             connection = DBUtil.getConnection();   //进行数据库连接
-            statement = connection.createStatement();
             sql = "insert into bootb (isbn,title, image,author,translator,publisher,pubdate,tags,binding,price,pages,author_intro,summary) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1,book.getIsbn10());
@@ -159,7 +187,7 @@ public class DatabaseManager {
             preparedStatement.setString(8,book.getTags());
             preparedStatement.setString(9,book.getBinding());
             preparedStatement.setString(10,book.getPrice());
-            preparedStatement.setInt(11,book.getPages());
+            preparedStatement.setString(11,book.getPages()+"");
             preparedStatement.setString(12,book.getAuthor_intro());
             preparedStatement.setString(13,book.getSummary());
             preparedStatement.executeUpdate();
@@ -171,7 +199,7 @@ public class DatabaseManager {
     }
 
     /**
-     * 根据isbn号查看书籍是否存在数据库中
+     * 根据isbn号查看书籍是否存在远程数据库中
      * @param isbn-书的isbn号
      * @return true-存在 false-不存在
      */
@@ -194,34 +222,141 @@ public class DatabaseManager {
         else return false;
     }
 
+    /**
+     * 判断书籍是否在远程数据库中，若存在，根据isbn号查询书籍信息
+     * @param isbn-书籍ISBN号
+     * @return 返回Book对象（已new）;若数据不存在，Book对象为null
+     */
     public static Book QueryBook(String isbn){
         Book book = new Book();
+        if(isBookExist(isbn)) {
+            try {
+                connection = DBUtil.getConnection();
+                sql = "select * from booktb where isbn = ?";
+                preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, isbn);
+                result = preparedStatement.executeQuery();
+                while (result.next()) {
+                    book.setId(result.getString("isbn"));
+                    book.setIsbn10(result.getString("isbn"));
+                    book.setTitle(result.getString("title"));
+                    book.setImage(result.getString("image"));
+                    book.setAuthor(result.getString("author"));
+                    book.setTranslator(result.getString("translator"));
+                    book.setPublisher(result.getString("publisher"));
+                    book.setPubdate(result.getString("pubdate"));
+                    book.setTags(result.getString("tags"));
+                    book.setBinding(result.getString("binging"));
+                    book.setPrice(result.getString("price"));
+                    book.setPages(result.getInt("pages") + "");
+                    book.setAuthor_intro(result.getString("author_intro"));
+                    book.setSummary(result.getString("summary"));
+                }
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return book;
+    }
+
+    /**
+     * 判断远程服务器中是否有该用户的user-book信息
+     * @param username 用户名
+     * @return true-至少有一条；false-一条都没有
+     */
+    public static boolean isUserBookExist(String username){
+        int count = 0;
         try {
             connection = DBUtil.getConnection();
-            sql = "select * from booktb where isbn = ?";
+            sql = "select count(*) from userbooktb where username = ?";
             preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1,isbn);
+            preparedStatement.setString(1,username);
             result = preparedStatement.executeQuery();
-            while(result.next()){
-                book.setId(result.getString("isbn"));
-                book.setIsbn10(result.getString("isbn"));
-                book.setTitle(result.getString("title"));
-                book.setImage(result.getString("image"));
-                book.setAuthor(result.getString("author"));
-                book.setTranslator(result.getString("translator"));
-                book.setPublisher(result.getString("publisher"));
-                book.setPubdate(result.getString("pubdate"));
-                book.setTags(result.getString("tags"));
-                book.setBinding(result.getString("binging"));
-                book.setPrice(result.getString("price"));
-                book.setPages(result.getInt("pages"));
-                book.setAuthor_intro(result.getString("author_intro"));
-                book.setSummary(result.getString("summary"));
+            while (result.next()){
+                count = result.getInt("count(*)");
             }
             connection.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return book;
+        return count >= 0;
     }
+
+    /**
+     * 根据用户id找到他的漂流瓶
+     * @return 漂流瓶列表
+     */
+
+    public static List<Drift> GetDrift(){
+        List<Drift> drifts = new ArrayList<>();
+        try {
+            connection = DBUtil.getConnection();
+            sql = "select * from drifttb";
+            preparedStatement = connection.prepareStatement(sql);
+
+            result = preparedStatement.executeQuery();
+            while(result.next()){
+                int id = result.getInt("id");
+                int author_id = result.getInt("author_id");
+                String time = result.getString("time");
+                String title = result.getString("title");
+                String book_author =result.getString("book_author");
+                String recommend = result.getString("recommend");
+                Drift drift = new Drift(id,author_id,time,title,book_author,recommend);
+                drifts.add(drift);
+            }
+            connection.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return drifts;
+    }
+
+    /**
+     * 获取漂流瓶个数
+     * @return 漂流瓶个数
+     */
+    public static int GetSizeOfDrifttb(){
+        int count = 0;
+        try {
+            connection = DBUtil.getConnection();
+            sql = "select count(*) from drifttb";
+            preparedStatement = connection.prepareStatement(sql);
+            result = preparedStatement.executeQuery();
+            while(result.next()){
+                count = result.getInt("count(*)");
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return count;
+    }
+
+    /**
+     *
+     * @return
+     */
+//    public static Drift GetOneDriftByRandom(){
+//        Drift drift = new Drift();
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                int count = GetSizeOfDrifttb();
+//
+//            }
+//        });
+//        thread.start();
+//        while (true){
+//            try {
+//                thread.join();
+//                break;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//
+//    }
+
 }

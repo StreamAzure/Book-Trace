@@ -3,15 +3,19 @@ package com.jnu.booktrace.Login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.jnu.booktrace.R;
@@ -29,9 +33,12 @@ import java.util.concurrent.CountDownLatch;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
     private static int USER_EXIT=1, USER_NOEXIT=0;
     private EditText register_name,register_password,register_password2;
-    private Button register_confirm, register_cancel;
+    private Button register_confirm;
     private Handler handler;
     private Boolean userExist=true, JudgeFinish=false;
+    private LinearLayout processbar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         initComp();  //初始化控件
         //设置按钮监听事件
         register_confirm.setOnClickListener(this);
-        register_cancel.setOnClickListener(this);
 
     }
 
@@ -49,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         register_password = findViewById(R.id.register_password);
         register_password2 = findViewById(R.id.register_password2);
         register_confirm = findViewById(R.id.register_confirm);
-        register_cancel = findViewById(R.id.register_cancel);
+        processbar = findViewById(R.id.register_processBar);
     }
 
     @Override
@@ -58,56 +64,37 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             case R.id.register_confirm:   //注册按钮
                 Confirm();
                 break;
-            case R.id.register_cancel:   //取消按钮,直接返回
-                finish();
-                break;
         }
     }
 
     private void Confirm() {
         String name, password, password2;
         Person person = new Person();
-        register_name.getText().toString();
         name = register_name.getText().toString();
         password = register_password.getText().toString();
         password2 = register_password2.getText().toString();
-        if(!name.equals("") && !password.equals("") && !password2.equals("")){
+        if(name.equals("")||password.equals("")||password2.equals("")){
+            Toast.makeText(RegisterActivity.this,"请输入完整的信息",Toast.LENGTH_SHORT).show();
+        }
+        else{
             if(!password.equals(password2)){//判断两次输入的密码是否一致
                 Toast.makeText(RegisterActivity.this,"两次输入的密码不一致，请重新输入",
                         Toast.LENGTH_SHORT).show();
             } else{//判断现在添加的用户是否以及存在，不存在则添加
+                processbar.setVisibility(View.VISIBLE);
+
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Boolean r  = DatabaseManager.judgePersonExist(name);
-                        Message message = new Message();
                         if(r){
-                            message.what = USER_EXIT;
-                            handler.sendMessage(message);
+                            userExist = true;
                         }else{
-                            message.what = USER_NOEXIT;
-                            handler.sendMessage(message);
+                            userExist =false;
                         }
-                        JudgeFinish = true;
                     }
                 });
                 thread.start();
-                handler = new Handler(Looper.getMainLooper()){
-                    @Override
-                    public void handleMessage(@NonNull Message msg) {
-                        super.handleMessage(msg);
-                        if(msg.what==USER_EXIT) {
-                            userExist = true;
-                            Toast.makeText(RegisterActivity.this, "注册的用户已存在，请重新输入",
-                                    Toast.LENGTH_SHORT).show();
-                            register_name.setText("");
-                            register_password.setText("");
-                            register_password2.setText("");
-                        }else if(msg.what==USER_NOEXIT){
-                            userExist = false;
-                        }
-                    }
-                };
                 while (true){
                     try {
                         thread.join();
@@ -121,19 +108,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     person.setPassword(password);
                     new Thread(()->{
                         DatabaseManager.insertPersontb(person);
+                        DBManager.deletePersontb();
+                        DBManager.insertPersontb(person);
                     }).start();
-                    //DBManager.insertPersontb(person);
                     Toast.makeText(RegisterActivity.this,"注册成功",
                             Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(this,LoginActivity.class);
                     startActivity(intent);
+
                     finish();
+                }else{
+                    processbar.setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this,"用户存在，请重新输入",Toast.LENGTH_SHORT).show();
+                    register_name.setText("");
+                    register_password.setText("");
+                    register_password2.setText("");
                 }
-
-
             }
-        }else {
-            Toast.makeText(RegisterActivity.this,"请输入完整的信息",Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -1,12 +1,15 @@
 package com.jnu.booktrace.adapter;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
@@ -19,10 +22,16 @@ import java.util.List;
 public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final List<Topic> adpList;
     private Context context;
+    private int[] colors;
 
     public TopicAdapter(Context context, List<Topic> postList){
         this.context = context;
         this.adpList = postList;
+        this.colors = new int[]{context.getColor(R.color.topic_blue),
+                context.getColor(R.color.topic_brown),
+                context.getColor(R.color.topic_green),
+                context.getColor(R.color.topic_grey)
+        };
     }
 
     @NonNull
@@ -39,10 +48,14 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Topic topic = adpList.get(position);
         topicHolder.tvTitle.setText(topic.getTitle());
         topicHolder.tvContent.setText(topic.getContent());
+        topicHolder.rootView.setCardBackgroundColor(colors[position%colors.length]);
+        topicHolder.rootView.setRadius(15);
         topicHolder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FreeTalkTopicActivity.class);
+                intent.putExtra("topic",(Parcelable)topic);
+                intent.putExtra("position",position);
                 context.startActivity(intent);
             }
         });
@@ -54,7 +67,7 @@ public class TopicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     class TopicHolder extends RecyclerView.ViewHolder{
-        View rootView;
+        CardView rootView;
         TextView tvTitle,tvContent;
         public TopicHolder(@NonNull View itemView) {
             super(itemView);

@@ -10,7 +10,8 @@ public class Post {
     private int replyCount;
     private int likeCount;
 
-    public Post(String username, String content, String relativeTopic){
+    public Post(int userAvatar, String username, String content, String relativeTopic){
+        this.userAvatar = userAvatar;
         this.username = username;
         this.content = content;
         this.relativeTopic = relativeTopic;

@@ -9,11 +9,17 @@ public class Person {
     private String name;
     private String password;
     private String nickName;
+    private String gender;
+    private String birth;
     private String description;
     private String avatar;
 
     public Person() {
-
+        setNickName("");
+        setGender("未知");
+        setBirth("");
+        setDescription("");
+        setAvatar("");
     }
 
     public Person(int id, String name, String password, String nickName, String description,String avatar) {
@@ -71,5 +77,21 @@ public class Person {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getBirth() {
+        return birth;
+    }
+
+    public void setBirth(String birth) {
+        this.birth = birth;
     }
 }

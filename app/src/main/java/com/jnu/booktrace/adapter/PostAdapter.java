@@ -1,6 +1,7 @@
 package com.jnu.booktrace.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
+import com.jnu.booktrace.activity.FreeTalkPostActivity;
+import com.jnu.booktrace.activity.FreeTalkTopicActivity;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Post;
 
@@ -41,13 +45,20 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         PostHolder postHolder = (PostHolder) holder;
         Post post = adpList.get(position);
-        postHolder.ivAvatar.setBackgroundResource(R.drawable.touxiang_bg);
+        postHolder.ivAvatar.setBackgroundResource(post.getUserAvatar());
         postHolder.tvUsername.setText(post.getUsername());
         postHolder.tvContent.setText(post.getContent());
         postHolder.tvDate.setText(post.getDate());
-        postHolder.btnRelativeTopic.setText(post.getRelativeTopic());
+        postHolder.tvRelativeTopicTitle.setText(post.getRelativeTopic());
         postHolder.btnReply.setText(post.getReplyCount()+"");
         postHolder.btnLike.setText(post.getLikeCount()+"");
+        postHolder.rootView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FreeTalkPostActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -56,19 +67,23 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     class PostHolder extends RecyclerView.ViewHolder{
+        View rootView;
+        CardView relativeTopic;
         ImageView ivAvatar;
-        TextView tvUsername, tvContent, tvDate;
-        Button btnReply, btnLike, btnRelativeTopic;
+        TextView tvUsername, tvContent, tvDate, tvRelativeTopicTitle;
+        Button btnReply, btnLike;
 
         public PostHolder(@NonNull View itemView) {
             super(itemView);
+            rootView = itemView.findViewById(R.id.item_post_root_view);
             ivAvatar = itemView.findViewById(R.id.iv_item_post_avatar);
             tvUsername = itemView.findViewById(R.id.tv_item_post_username);
             tvContent = itemView.findViewById(R.id.tv_item_post_content);
             tvDate = itemView.findViewById(R.id.tv_item_post_date);
             btnReply = itemView.findViewById(R.id.btn_item_post_reply);
             btnLike = itemView.findViewById(R.id.btn_item_post_like);
-            btnRelativeTopic = itemView.findViewById(R.id.btn_item_post_relative_topic);
+            relativeTopic = itemView.findViewById(R.id.cardView_item_post_relative_topic);
+            tvRelativeTopicTitle = itemView.findViewById(R.id.tv_relativeTopic_title);
         }
     }
 }

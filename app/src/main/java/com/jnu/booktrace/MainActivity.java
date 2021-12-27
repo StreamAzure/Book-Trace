@@ -1,27 +1,29 @@
 package com.jnu.booktrace;
 
-import static com.jnu.booktrace.database.DBManager.initDB;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.jnu.booktrace.bean.Drift;
+import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.database.DBManager;
+import com.jnu.booktrace.database.DatabaseManager;
 import com.jnu.booktrace.fragments.DriftFragment;
 import com.jnu.booktrace.fragments.FreeTalkFragment;
 import com.jnu.booktrace.fragments.LibraryFragment;
 import com.jnu.booktrace.fragments.PersonFragment;
+import com.jnu.booktrace.utils.AndroidBarUtils;
 
 import java.util.List;
 
@@ -34,21 +36,37 @@ public class MainActivity extends AppCompatActivity {
     private DriftFragment driftFragment;
     private FreeTalkFragment freeTalkFragment;
     private PersonFragment personFragment;
-
-    private boolean isExit = false;
     private Intent intent;
     private String name;
+    public static Person person;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initDB(this);//初始化数据库
+        //状态栏颜色更改
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        //注意要清除 FLAG_TRANSLUCENT_STATUS flag
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        AndroidBarUtils.setBarDarkMode(this,true); //状态栏文字图标颜色为黑色
+
         intent = getIntent();
         name = intent.getStringExtra("name");
+        person = DBManager.getPersonFromName(name);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //每次更新drift数据库
+                //if();
+            }
+        });
+        thread.start();
+
         initFragment(); //将底部导航栏各按钮与对应Fragment绑定
         myRequestPermission(); //权限请求
     }
+
+
 
     private void myRequestPermission(){
         //6.0版本或以上需请求权限
@@ -88,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if(item.getItemId()==R.id.item_bottom_person){
                     if(personFragment == null){
-                        personFragment = new PersonFragment(name);
+                        personFragment = new PersonFragment();
                     }
                     setFragment(personFragment);
                 }

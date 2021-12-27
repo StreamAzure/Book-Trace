@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".library.LibraryBookDetailActivity">
+    android:background="@color/white"
+    tools:context=".activity.StartPageActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/start_page"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
