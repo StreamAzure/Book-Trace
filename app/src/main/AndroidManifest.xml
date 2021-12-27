@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.jnu.booktrace" >
+    package="com.jnu.booktrace">
     <!-- 摄像头相关权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -22,13 +22,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BookTrace.NoActionBar"
-        android:usesCleartextTraffic="true" >
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".drift.DriftInfoActivity"
             android:exported="false" />
         <activity
             android:name=".activity.StartPageActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -69,21 +69,18 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ScanActivity"
-            android:exported="false"
-            android:label="@string/title_activity_scan"
-            android:theme="@style/Theme.BookTrace.NoActionBar" />
-        <activity
             android:name=".Login.LoginActivity"
             android:exported="false"
-            android:theme="@style/Theme.BookTrace.FullScreen" >
-        </activity>
-
+            android:theme="@style/Theme.BookTrace.FullScreen"/>
+        <activity
+            android:name="com.king.zxing.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/CaptureTheme"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.jnu.booktrace"
             android:exported="false"
-            android:grantUriPermissions="true" >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths_public" />

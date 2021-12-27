@@ -1,5 +1,6 @@
 package com.jnu.booktrace.fragments;
 
+import static android.app.Activity.RESULT_OK;
 import static com.jnu.booktrace.database.DBManager.QueryBook;
 import static com.jnu.booktrace.database.DBManager.isBookExist;
 
@@ -8,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +26,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.activity.LibraryBookDetailActivity;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.TagInfo;
 import com.jnu.booktrace.utils.ISBNApiUtil;
 import com.jnu.booktrace.utils.ImageUtil;
+import com.king.zxing.CameraScan;
+import com.king.zxing.CaptureActivity;
 import com.kongzue.dialogx.DialogX;
+import com.kongzue.dialogx.dialogs.InputDialog;
+import com.kongzue.dialogx.dialogs.MessageDialog;
+import com.kongzue.dialogx.interfaces.OnBindView;
+import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener;
+import com.kongzue.dialogx.interfaces.OnInputDialogButtonClickListener;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionButton;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionHelper;
+import com.wangjie.rapidfloatingactionbutton.RapidFloatingActionLayout;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RFACLabelItem;
+import com.wangjie.rapidfloatingactionbutton.contentimpl.labellist.RapidFloatingActionContentLabelList;
 import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
 import com.yanzhenjie.recyclerview.SwipeMenu;
 import com.yanzhenjie.recyclerview.SwipeMenuBridge;
@@ -44,16 +56,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class LibraryFragment extends Fragment {
+public class LibraryFragment extends Fragment implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
+    private static final int REQUEST_CODE_SCAN = 100;
+    private static final int REQUEST_CODE_PHOTO = 200;
     private List<Book> mBookList;
     private SwipeRecyclerView mRecyclerView;
     private BookAdapter mBookAdapter;
     private Toolbar toolbar;
     private Spinner spinner;
-
-    private FloatingActionMenu floatingActionMenu;
-    private FloatingActionButton fabAddByIsbn;
-
+    private RapidFloatingActionLayout rfaLayout;
+    private RapidFloatingActionContentLabelList rfaContent;
+    private RapidFloatingActionButton rfaBtn;
+    private RapidFloatingActionHelper rfabHelper;
+    HashMap<String, Drawable> imgCache;     // 图片缓存
+    HashMap<Integer, TagInfo> tag_map;      // TagInfo缓存
+    ImageUtil loader;                // 异步加载图片类
 
     public LibraryFragment() {}
     public static LibraryFragment newInstance() {
@@ -67,6 +84,28 @@ public class LibraryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DialogX.init(getContext());
+        imgCache = new HashMap<String, Drawable>();
+        loader = new ImageUtil();
+        tag_map = new HashMap<Integer, TagInfo>();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK && data!=null){
+            switch (requestCode){
+                case REQUEST_CODE_SCAN:
+                    String result = CameraScan.parseScanResult(data);
+                    Log.e("扫描结果：",result);
+                    Toast.makeText(getContext(),result,Toast.LENGTH_SHORT);
+                    handleScanResult(result);
+                    break;
+                case REQUEST_CODE_PHOTO:
+                    //arsePhoto(data);
+                    break;
+            }
+
+        }
     }
 
     @Override
@@ -78,42 +117,211 @@ public class LibraryFragment extends Fragment {
 
         initData();
         initRecyclerView(rootView);
-        initFab(rootView);
+        initFabList(rootView);
 
         return rootView;
     }
 
-    private void initFab(View v){
-        floatingActionMenu = v.findViewById(R.id.fab_button);
-        fabAddByIsbn = v.findViewById(R.id.fab_menu_add_by_isbn);
-//        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                InputDialog inputDialog = new InputDialog("添加书籍", "请输入书籍的ISBN号", "添加", "取消", "")
-//                        .setCancelable(false)
-//                        .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
+    private void initFabList(View v){
+        rfaLayout = v.findViewById(R.id.activity_main_rfal);
+        rfaBtn = v.findViewById(R.id.activity_main_rfab);
+        rfaContent = new RapidFloatingActionContentLabelList(getContext());
+        rfaContent.setOnRapidFloatingActionContentLabelListListener(this);
+        List<RFACLabelItem> items = new ArrayList<>();
+        items.add(new RFACLabelItem<Integer>()
+                .setLabel("手动添加")
+                .setResId(R.mipmap.library_fab_ic_input)
+                .setIconNormalColor(0xffd84315)
+                .setIconPressedColor(0xffbf360c)
+                .setWrapper(0)
+        );
+        items.add(new RFACLabelItem<Integer>()
+                .setLabel("扫描添加")
+                .setResId(R.mipmap.library_fab_ic_scan)
+                .setIconNormalColor(0xffd84315)
+                .setIconPressedColor(0xffbf360c)
+                .setWrapper(1)
+        );
+//        items.add(new RFACLabelItem<Integer>()
+//                .setLabel("从相册添加")
+//                .setResId(R.mipmap.library_fab_ic_scan)
+//                .setIconNormalColor(0xffd84315)
+//                .setIconPressedColor(0xffbf360c)
+//                .setWrapper(2)
+//        );
+        rfaContent
+                .setItems(items)
+                .setIconShadowColor(0xff888888);
+        rfabHelper = new RapidFloatingActionHelper(
+                getContext(),
+                rfaLayout,
+                rfaBtn,
+                rfaContent
+        ).build();
+    }
+
+    /**
+     * 扫描条形码的ISBN处理
+     */
+    private void handleScanResult(String inputStr){
+        Book book = new Book();
+        Toast.makeText(getContext(),"查询书籍中……",Toast.LENGTH_LONG).show();
+        new ISBNApiUtil().getBookFromISBN(book,inputStr);
+        if(inputStr == null || book.getTitle() == null){
+            Toast.makeText(getContext(),"查询失败！请重试", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            MessageDialog.show("确认书籍", null, "确定", "取消", "重扫")
+                    .setCustomView(new OnBindView<MessageDialog>(R.layout.dialog_layout_custom_view) {
+                        @Override
+                        public void onBind(MessageDialog dialog, View v) {
+                            ImageView image = v.findViewById(R.id.iv_item_book_image);
+                            TextView title = v.findViewById(R.id.tv_item_book_title);
+                            TextView author = v.findViewById(R.id.tv_item_book_author);
+
+                            //显示标题、作者、封面
+                            title.setText(book.getTitle());
+                            author.setText(book.getAuthor());
+
+                            String imgurl = book.getImage();   // 得到该项所代表的url地址
+                            Drawable drawable = imgCache.get(imgurl);       // 先去缓存中找
+
+                            TagInfo tag = new TagInfo();
+                            tag.url = book.getImage();
+
+                            if (null != drawable) {                         // 找到了直接设置为图像
+                                image.setImageDrawable(drawable);
+                            }
+                            else {                                      // 没找到则开启异步线程
+                                drawable = loader.loadDrawableByTag(tag, new ImageUtil.ImageCallBack() {
+                                    @Override
+                                    public void obtainImage(TagInfo ret_info) {
+                                        imgCache.put(ret_info.url, ret_info.drawable);    // 首先把获取的图片放入到缓存中
+                                        // 通过返回的TagInfo去Tag缓存中找，然后再通过找到的Tag来获取到所对应的ImageView
+                                        image.setImageDrawable(ret_info.drawable);
+                                    }
+                                });
+                            }
+                        }
+                    }).setOkButton(new OnDialogButtonClickListener<MessageDialog>() {
+                @Override
+                public boolean onClick(MessageDialog baseDialog, View v) {
+                    //确定按钮
+                    mBookList.add(book);
+                    mBookAdapter.notifyItemInserted(mBookList.size());
+                    return false;
+                }
+            }).setOtherButton(new OnDialogButtonClickListener<MessageDialog>() {
+                @Override
+                public boolean onClick(MessageDialog baseDialog, View v) {
+                    //重扫按钮
+                    startActivityForResult(new Intent(getContext(), CaptureActivity.class),REQUEST_CODE_SCAN);
+                    return false;
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onRFACItemLabelClick(int position, RFACLabelItem item) {
+        //Toast.makeText(getContext(), "clicked label: " + position, Toast.LENGTH_SHORT).show();
+        switch (position){
+            case 0:
+                InputDialog inputDialog = new InputDialog("添加书籍", "请输入书籍的ISBN号", "添加", "取消", "")
+                            .setCancelable(false)
+                            .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
+                                @Override
+                                public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
+                                    if(!inputStr.isEmpty()){
+                                        Book book = new Book();
+                                        Toast.makeText(getContext(),"查询书籍中……",Toast.LENGTH_LONG).show();
+                                        new ISBNApiUtil().getBookFromISBN(book,inputStr);
+                                        if(book.getTitle() == null){
+                                            Toast.makeText(getContext(),"书籍添加失败！请确认ISBN号是否正确",Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            Toast.makeText(getContext(),"书籍添加成功",Toast.LENGTH_SHORT).show();
+                                            mBookList.add(book);
+                                            mBookAdapter.notifyItemInserted(mBookList.size());
+                                        }
+                                    }
+                                    else{
+                                        Toast.makeText(getContext(),"请输入ISBN号",Toast.LENGTH_SHORT).show();
+                                    }
+                                    return false;
+                                }
+                            });
+                    inputDialog.show();
+                break;
+            case 1:
+                startActivityForResult(new Intent(getContext(), CaptureActivity.class),REQUEST_CODE_SCAN);
+                break;
+        }
+        rfabHelper.toggleContent();
+    }
+
+    @Override
+    public void onRFACItemIconClick(int position, RFACLabelItem item) {
+        //Toast.makeText(getContext(), "clicked icon: " + position, Toast.LENGTH_SHORT).show();
+        switch (position){
+            case 0:
+            InputDialog inputDialog = new InputDialog("添加书籍", "请输入书籍的ISBN号", "添加", "取消", "")
+                        .setCancelable(false)
+                        .setOkButton(new OnInputDialogButtonClickListener<InputDialog>() {
+                            @Override
+                            public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
+                                if(!inputStr.isEmpty()){
+                                    Book book = new Book();
+                                    Toast.makeText(getContext(),"查询书籍中……",Toast.LENGTH_LONG).show();
+                                    new ISBNApiUtil().getBookFromISBN(book,inputStr);
+                                    if(book.getTitle() == null){
+                                        Toast.makeText(getContext(),"书籍添加失败！请确认ISBN号是否正确",Toast.LENGTH_SHORT).show();
+                                    }
+                                    else{
+                                        mBookList.add(book);
+                                        mBookAdapter.notifyItemInserted(mBookList.size());
+                                        Toast.makeText(getContext(),"书籍添加成功",Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                else{
+                                    Toast.makeText(getContext(),"请输入ISBN号",Toast.LENGTH_SHORT).show();
+                                }
+                                return false;
+                            }
+                        });
+                inputDialog.show();
+                break;
+            case 1:
+                startActivityForResult(new Intent(getContext(), CaptureActivity.class),REQUEST_CODE_SCAN);
+                break;
+            case 2:
+//                //打开相册
+//                EasyPhotos.createAlbum(getActivity(), true,false, GlideEngine.getInstance())//参数说明：上下文，是否显示相机按钮，是否使用宽高数据（false时宽高数据为0，扫描速度更快），[配置Glide为图片加载引擎](https://github.com/HuanTanSheng/EasyPhotos/wiki/12-%E9%85%8D%E7%BD%AEImageEngine%EF%BC%8C%E6%94%AF%E6%8C%81%E6%89%80%E6%9C%89%E5%9B%BE%E7%89%87%E5%8A%A0%E8%BD%BD%E5%BA%93)
+//                        .setFileProviderAuthority("com.jnu.booktrace")//参数说明：见下方`FileProvider的配置`
+//                        .start(new SelectCallback() {
 //                            @Override
-//                            public boolean onClick(InputDialog baseDialog, View v, String inputStr) {
-//                                if(!inputStr.isEmpty()){
-//                                    Book book = new Book();
-//                                    Toast.makeText(getContext(),"查询书籍中……",Toast.LENGTH_LONG).show();
-//                                    new ISBNApiUtil().getBookFromISBN(book,inputStr);
-//                                    if(book.getTitle() == null){
-//                                        Toast.makeText(getContext(),"书籍添加失败！请确认ISBN号是否正确",Toast.LENGTH_SHORT).show();
-//                                    }
-//                                    else{
-//                                        Toast.makeText(getContext(),"书籍添加成功",Toast.LENGTH_SHORT).show();
-//                                    }
+//                            public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
+//                                //获取file,进行对应操作
+//                                try {
+//                                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photos.get(0).uri);
+//                                    bitmap = ImageHandle.compressImage(bitmap);
+//                                    Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+//
+//                                    //解析条形码/二维码
+//                                    String result = CodeUtils.parseCode(bitmap);
+//                                    Log.e("从相册获取条形码",result);
+//
+//                                } catch (IOException e) {
+//                                    e.printStackTrace();
 //                                }
-//                                else{
-//                                    Toast.makeText(getContext(),"请输入ISBN号",Toast.LENGTH_SHORT).show();
-//                                }
-//                                return false;
+//                            }
+//                            @Override
+//                            public void onCancel() {
 //                            }
 //                        });
-//                inputDialog.show();
-//            }
-//        });
+                break;
+        }
+        rfabHelper.toggleContent();
     }
 
     private void initToolbar(View v){
@@ -134,7 +342,6 @@ public class LibraryFragment extends Fragment {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
         //spinner_dropdown_item 下拉的样式
         spinner.setAdapter(adapter);
-
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -204,9 +411,9 @@ public class LibraryFragment extends Fragment {
                 int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
 
                 if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
-                    Toast.makeText(getContext(), "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
                 } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
-                    Toast.makeText(getContext(), "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -223,17 +430,10 @@ public class LibraryFragment extends Fragment {
     public class BookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private List<Book> adpList;
         private Context context;
-        HashMap<String, Drawable> imgCache;     // 图片缓存
-        HashMap<Integer, TagInfo> tag_map;      // TagInfo缓存
-        ImageUtil loader;                // 异步加载图片类
-
 
         public BookAdapter(Context context, List<Book> bookList){
             this.context = context;
             this.adpList = bookList;
-            imgCache = new HashMap<String, Drawable>();
-            loader = new ImageUtil();
-            tag_map = new HashMap<Integer, TagInfo>();
 
         }
         @NonNull
