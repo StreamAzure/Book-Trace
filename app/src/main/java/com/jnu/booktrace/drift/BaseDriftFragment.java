@@ -22,6 +22,7 @@ public abstract class BaseDriftFragment extends Fragment {
     private List<Drift> mDatas;
     private RecyclerView recyclerView;
     private DriftAdapter driftAdapter;
+    private int[] colors;
     public BaseDriftFragment() {
     }
 

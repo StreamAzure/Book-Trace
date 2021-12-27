@@ -55,15 +55,15 @@ public class ChangeAvatarActivity extends AppCompatActivity {
     private void initPic() {
         String avatar = FileHandle.ReadFromFile("avatar.txt");
         if(avatar.equals("")){
-            if(MainActivity.person.getGender().equals("女")){
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.woman);
-                Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
-                imageView_tx.setImageBitmap(bitmap1);
-            }else{
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.man);
-                Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
-                imageView_tx.setImageBitmap(bitmap1);
-            }
+//            if(MainActivity.person.getGender().equals("女")){
+//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.woman);
+//                Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+//                imageView_tx.setImageBitmap(bitmap1);
+//            }else{
+//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.man);
+//                Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+//                imageView_tx.setImageBitmap(bitmap1);
+//            }
         }else{
             Bitmap bitmap = ImageHandle.stringToBitmap(avatar);
             //Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);

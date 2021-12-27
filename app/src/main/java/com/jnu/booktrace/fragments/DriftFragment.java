@@ -87,10 +87,10 @@ public class DriftFragment extends Fragment {
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 switch (position){
                     case 0:
-                        tab.setText("他人漂流瓶");
+                        tab.setText("我收到的漂流瓶");
                         break;
                     default:
-                        tab.setText("个人漂流瓶");
+                        tab.setText("我发出的漂流瓶");
                         break;
                 }
             }

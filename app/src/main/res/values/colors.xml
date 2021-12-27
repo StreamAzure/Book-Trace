@@ -36,10 +36,18 @@
     <!--主题帖浏览页话题按钮的背景颜色-->
     <color name="topic_in_post_background">#F3F3F5</color>
 
+    <!--自由谈话题的背景颜色-->
     <color name="topic_blue">#6885B1</color>
     <color name="topic_green">#80A5A6</color>
     <color name="topic_grey">#9F9F89</color>
     <color name="topic_brown">#BAA68A</color>
 
+    <!--漂流瓶的背景颜色-->
+    <color name="bottle_3">#98CAD9</color>
+    <color name="bottle_2">#9FD1D5</color>
+    <color name="bottle_1">#BAC7C5</color>
+    <color name="bottle_4">#BAB1B1</color>
+    <color name="bottle_5">#EED5CF</color>
+    
     <color name="book_detail_review_background">#F5F5F5</color>
 </resources>

@@ -41,11 +41,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         setTopName();
         String avatar = FileHandle.ReadFromFile("avatar.txt");
         if(avatar.equals("")){
-            if(MainActivity.person.getGender().equals("女")){
-                person_iv_avatar.setImageResource(R.drawable.woman);
-            }else {
-                person_iv_avatar.setImageResource(R.drawable.man);
-            }
+//            if(MainActivity.person.getGender().equals("女")){
+//                person_iv_avatar.setImageResource(R.drawable.woman);
+//            }else {
+//                person_iv_avatar.setImageResource(R.drawable.man);
+//            }
         }else{
             person_iv_avatar.setImageBitmap(ImageHandle.stringToBitmap(avatar));
         }
