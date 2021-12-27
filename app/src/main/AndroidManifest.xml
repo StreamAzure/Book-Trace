@@ -24,9 +24,6 @@
         android:theme="@style/Theme.BookTrace.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".drift.DriftInfoActivity"
-            android:exported="false" />
-        <activity
             android:name=".activity.StartPageActivity"
             android:exported="true">
             <intent-filter>

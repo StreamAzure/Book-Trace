@@ -85,7 +85,7 @@ public class LibraryBookDetailActivity extends AppCompatActivity {
             loadBookImage(book); //获取书籍封面，代码较长，单独处理
             tvBookTitle.setText(book.getTitle());
             tvBookSummary.setText(book.getSummary());
-            if(book.getTranslator()!=null) {
+            if(book.getTranslator()!=null && !book.getTranslator().equals("null")) {
                 tvBookAuthor.setText("[著] "+ book.getAuthor()+"\n[译] " + book.getTranslator());
             }
             else tvBookAuthor.setText("[著] "+book.getAuthor());

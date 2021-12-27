@@ -59,7 +59,7 @@ import java.util.List;
 public class LibraryFragment extends Fragment implements RapidFloatingActionContentLabelList.OnRapidFloatingActionContentLabelListListener{
     private static final int REQUEST_CODE_SCAN = 100;
     private static final int REQUEST_CODE_PHOTO = 200;
-    private List<Book> mBookList;
+    public List<Book> mBookList;
     private SwipeRecyclerView mRecyclerView;
     private BookAdapter mBookAdapter;
     private Toolbar toolbar;

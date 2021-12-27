@@ -16,7 +16,6 @@ import com.jnu.booktrace.database.DBManager;
 
 public class OwnDriftFragment extends BaseDriftFragment {
 
-
     @Override
     public void loadDatas() {
         setmDatas(DBManager.GetOwnDriftById(MainActivity.person.getId()));

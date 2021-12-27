@@ -4,6 +4,7 @@ public class Drift {
     private int id;
     private int author_id;
     private String time;
+    private String book_image;
     private String book_author;
     private String title;
     private String recommend;
@@ -11,10 +12,20 @@ public class Drift {
     public Drift() {
     }
 
-    public Drift(int id, int author_id,String time,  String title, String book_author, String recommend) {
+    public Drift(int id, int author_id, String time, String title, String book_author, String recommend){
         this.id = id;
         this.author_id = author_id;
         this.time = time;
+        this.title = title;
+        this.book_author = book_author;
+        this.recommend = recommend;
+    }
+
+    public Drift(int id, int author_id, String time, String image, String title, String book_author, String recommend) {
+        this.id = id;
+        this.author_id = author_id;
+        this.time = time;
+        this.book_image = image;
         this.title = title;
         this.book_author = book_author;
         this.recommend = recommend;
@@ -68,4 +79,11 @@ public class Drift {
         this.time = time;
     }
 
+    public String getBook_image() {
+        return book_image;
+    }
+
+    public void setBook_image(String book_image) {
+        this.book_image = book_image;
+    }
 }
