@@ -16,9 +16,11 @@ import android.widget.Toast;
 
 import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
+import com.jnu.booktrace.activity.StartPageActivity;
 import com.jnu.booktrace.bean.Person;
 import com.jnu.booktrace.database.DBManager;
 import com.jnu.booktrace.database.DatabaseManager;
+import com.jnu.booktrace.filehandle.FileHandle;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginActivity extends Activity implements View.OnClickListener {
     private static int USER_EXiST=1;
     private EditText nameEt, passwordEt;
-    private Button confirmBt, cancelBt;
+    private Button confirmBt;
     private Boolean exist = false,finish = false;
     private LinearLayout processBar;
     private Person person;
@@ -83,12 +85,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     }
                     if(finish){
                         if(exist){
+
                             if(!JudgePeopleInSqlite){
                                 GetPeopleFromMysql(name);
+                                FileHandle.WriteToFile(LoginActivity.this,"avatar.txt",person.getAvatar());
                                 DBManager.insertPersontb(person);
                             }
                             Intent intent = new Intent(this, MainActivity.class);
                             intent.putExtra("name",name);
+
                             Toast.makeText(LoginActivity.this,"登录成功！",Toast.LENGTH_SHORT).show();
                             startActivity(intent);
                             finish();

@@ -30,6 +30,7 @@ import com.huantansheng.easyphotos.models.album.entity.Photo;
 import com.jnu.booktrace.MainActivity;
 import com.jnu.booktrace.R;
 
+import com.jnu.booktrace.filehandle.FileHandle;
 import com.jnu.booktrace.imagehandle.GlideEngine;
 import com.jnu.booktrace.imagehandle.ImageHandle;
 
@@ -52,7 +53,8 @@ public class ChangeAvatarActivity extends AppCompatActivity {
     }
 
     private void initPic() {
-        if(MainActivity.person.getAvatar().equals("")){
+        String avatar = FileHandle.ReadFromFile("avatar.txt");
+        if(avatar.equals("")){
             if(MainActivity.person.getGender().equals("女")){
                 Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.woman);
                 Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
@@ -63,8 +65,7 @@ public class ChangeAvatarActivity extends AppCompatActivity {
                 imageView_tx.setImageBitmap(bitmap1);
             }
         }else{
-
-            Bitmap bitmap = ImageHandle.stringToBitmap(MainActivity.person.getAvatar());
+            Bitmap bitmap = ImageHandle.stringToBitmap(avatar);
             //Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
             imageView_tx.setImageBitmap(bitmap);
         }
@@ -111,10 +112,13 @@ public class ChangeAvatarActivity extends AppCompatActivity {
                                 //获取file,进行对应操作
                                 try {
                                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photos.get(0).uri);
+                                    bitmap = ImageHandle.compressImage(bitmap);
                                     Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+
+                                    FileHandle.WriteToFile(ChangeAvatarActivity.this,"avatar.txt",ImageHandle.getImageStr(bitmap1));
                                     bitmap1= ImageHandle.rotateBimap(ChangeAvatarActivity.this,90,bitmap1);
                                     Log.i("头像", "onResult: "+ImageHandle.getImageStr(bitmap1));
-                                    MainActivity.person.setAvatar(ImageHandle.getImageStr(bitmap1));
+
                                     imageView_tx.setImageBitmap(bitmap1);
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -139,9 +143,11 @@ public class ChangeAvatarActivity extends AppCompatActivity {
                                 //获取file,进行对应操作
                                 try {
                                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photos.get(0).uri);
+                                    bitmap = ImageHandle.compressImage(bitmap);
                                     Bitmap bitmap1 = ImageHandle.toRoundBitmap(bitmap);
+
                                     bitmap1= ImageHandle.rotateBimap(ChangeAvatarActivity.this,90,bitmap1);
-                                    MainActivity.person.setAvatar(ImageHandle.getImageStr(bitmap1));
+                                    FileHandle.WriteToFile(ChangeAvatarActivity.this,"avatar.txt",ImageHandle.getImageStr(bitmap1));
                                     imageView_tx.setImageBitmap(bitmap1);
                                 } catch (IOException e) {
                                     e.printStackTrace();

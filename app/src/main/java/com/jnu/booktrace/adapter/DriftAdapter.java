@@ -1,6 +1,7 @@
 package com.jnu.booktrace.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Drift;
+import com.jnu.booktrace.drift.DriftInfoActivity;
 import com.jnu.booktrace.fragments.DriftFragment;
 
 import java.util.List;
@@ -39,7 +41,8 @@ public class DriftAdapter extends RecyclerView.Adapter {
             viewHolder.getRootView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent intent = new Intent(context, DriftInfoActivity.class);
+                    context.startActivity(intent);
                 }
             });
     }

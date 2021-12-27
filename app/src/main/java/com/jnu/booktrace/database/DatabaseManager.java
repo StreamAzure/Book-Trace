@@ -9,6 +9,7 @@ import com.jnu.booktrace.R;
 import com.jnu.booktrace.bean.Book;
 import com.jnu.booktrace.bean.Drift;
 import com.jnu.booktrace.bean.Person;
+import com.jnu.booktrace.filehandle.FileHandle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -139,7 +140,7 @@ public class DatabaseManager {
                 person.setGender(result.getString("gender"));
                 person.setBirth(result.getString("birth"));
                 person.setDescription(result.getString("description"));
-                person.setAvatar(result.getString("avatar"));
+                person.setAvatar(FileHandle.ReadFromFile("avatar.txt"));
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -157,7 +158,7 @@ public class DatabaseManager {
             preparedStatement.setString(3,person.getGender());
             preparedStatement.setString(4,person.getBirth());
             preparedStatement.setString(5,person.getDescription());
-            preparedStatement.setString(6,person.getAvatar());
+            preparedStatement.setString(6, FileHandle.ReadFromFile("avatar.txt"));
             preparedStatement.setInt(7,person.getId());
             preparedStatement.executeUpdate();
             connection.close();
