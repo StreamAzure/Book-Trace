@@ -28,7 +28,6 @@ public class Book implements Parcelable {
     public Book(){
 
     }
-
     protected Book(Parcel in) {
         id = in.readString();
         isbn10 = in.readString();

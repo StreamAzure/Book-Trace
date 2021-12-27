@@ -171,6 +171,7 @@ public class LibraryFragment extends Fragment implements RapidFloatingActionCont
             Toast.makeText(getContext(),"查询失败！请重试", Toast.LENGTH_SHORT).show();
         }
         else {
+            Log.e("book",book.getTitle()+" "+book.getAuthor()+" "+book.getImage());
             MessageDialog.show("确认书籍", null, "确定", "取消", "重扫")
                     .setCustomView(new OnBindView<MessageDialog>(R.layout.dialog_layout_custom_view) {
                         @Override
