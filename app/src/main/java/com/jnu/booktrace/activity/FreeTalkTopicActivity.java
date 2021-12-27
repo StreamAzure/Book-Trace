@@ -133,13 +133,13 @@ public class FreeTalkTopicActivity extends AppCompatActivity {
 
     private void initData(){
         posts = new ArrayList<>();
-        posts.add(new Post("缄言","这是书店日记吗",topic.getTitle()));
-        posts.add(new Post("碎","哈哈哈哈书店四季？",topic.getTitle()));
-        posts.add(new Post("Shirley\uD83C\uDF6D","貌似手裡有書，心不慌！",topic.getTitle()));
-        posts.add(new Post("狗腿子","为猫仔来一通乱赞\uD83D\uDC4F",topic.getTitle()));
-        posts.add(new Post("冬妮娅","旁边的面包看着好好吃",topic.getTitle()));
-        posts.add(new Post("记忆中的夏天","我手中的书估计你不会想要",topic.getTitle()));
-        posts.add(new Post("悬铃木下","书店四季",topic.getTitle()));
-        posts.add(new Post("米小姐","哇，肉桂卷",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic1, "缄言","这是书店日记吗",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic2,"碎","哈哈哈哈书店四季？",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic3,"Shirley\uD83C\uDF6D","貌似手裡有書，心不慌！",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic4,"狗腿子","为猫仔来一通乱赞\uD83D\uDC4F",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic5,"冬妮娅","旁边的面包看着好好吃",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic6,"记忆中的夏天","我手中的书估计你不会想要",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic7,"悬铃木下","书店四季",topic.getTitle()));
+        posts.add(new Post(R.drawable.pic8,"米小姐","哇，肉桂卷",topic.getTitle()));
     }
 }

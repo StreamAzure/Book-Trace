@@ -45,7 +45,7 @@ public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         PostHolder postHolder = (PostHolder) holder;
         Post post = adpList.get(position);
-        postHolder.ivAvatar.setBackgroundResource(R.drawable.touxiang_bg);
+        postHolder.ivAvatar.setBackgroundResource(post.getUserAvatar());
         postHolder.tvUsername.setText(post.getUsername());
         postHolder.tvContent.setText(post.getContent());
         postHolder.tvDate.setText(post.getDate());

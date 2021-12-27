@@ -42,13 +42,13 @@ public class StartPageActivity extends Activity {
             }
         };
         myThread.start();//启动线程
-        while(true){
-            try {
-                myThread.join();
-                break;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        while(true){
+//            try {
+//                myThread.join();
+//                break;
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 }
