@@ -9,11 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.jnu.booktrace.R;
 import com.jnu.booktrace.adapter.PostAdapter;
 import com.jnu.booktrace.adapter.ReplyAdapter;
+import com.jnu.booktrace.bean.Post;
 import com.jnu.booktrace.bean.Reply;
 import com.jnu.booktrace.utils.AndroidBarUtils;
 
@@ -41,6 +44,7 @@ public class FreeTalkPostActivity extends AppCompatActivity {
 
         initToolbar();
         initData();
+        initPoster();
 
         recyclerView = findViewById(R.id.recycler_view);
         layoutManager = new LinearLayoutManager(this);
@@ -59,7 +63,7 @@ public class FreeTalkPostActivity extends AppCompatActivity {
 
         //获取toolbar
         toolbar = findViewById(R.id.toolbar);
-//        //主标题，必须在setSupportActionBar之前设置，否则无效，如果放在其他位置，则直接setTitle即可
+        //主标题，必须在setSupportActionBar之前设置，否则无效，如果放在其他位置，则直接setTitle即可
         toolbar.setTitle("详情");
         //用toolbar替换actionbar
         setSupportActionBar(toolbar);
@@ -86,6 +90,23 @@ public class FreeTalkPostActivity extends AppCompatActivity {
         replyList.add(new Reply(R.drawable.default_avatar,"电饭煲","测试回复","2021-10-01"));
         replyList.add(new Reply(R.drawable.default_avatar,"电饭煲","测试回复","2021-10-01"));
         replyList.add(new Reply(R.drawable.default_avatar,"电饭煲","测试回复","2021-10-01"));
+    }
+
+    private void initPoster(){ //初始化并设置楼主的数据
+        //要从外面传进来一个Post，但先不管了
+        Post post = new Post("楼主用户名",
+                "楼主内容","关联主题");
+        ImageView avatar = findViewById(R.id.iv_activity_post_avatar);
+        TextView username = findViewById(R.id.tv_activity_post_username);
+        TextView content = findViewById(R.id.tv_activity_post_content);
+        TextView date = findViewById(R.id.tv_activity_post_date);
+        TextView replyCount = findViewById(R.id.tv_activity_post_reply_count);
+
+        avatar.setImageDrawable(this.getDrawable(R.drawable.default_avatar));
+        username.setText(post.getUsername());
+        content.setText(post.getContent());
+        date.setText(post.getDate());
+        replyCount.setText("共"+replyList.size()+"条回复");
     }
 
 }

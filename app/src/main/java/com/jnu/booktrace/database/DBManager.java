@@ -177,6 +177,24 @@ public class DBManager {
         return book;
     }
 
+    /**
+     * 查询某个用户某个指定书架的所有书籍
+     * @param username 用户名
+     * @param bookshelf 书架名
+     * @return 属于该书架的书籍的ArrayList
+     */
+    public static ArrayList<Book> QueryBookByBookshelf(String username, String bookshelf){
+        ArrayList<Book> arrayList = new ArrayList<>();
+        String sql = "select * from userbooktb where username = ? and bookshelf = ?";
+        Cursor cursor = db.rawQuery(sql, new String[]{username,bookshelf});
+        cursor.moveToFirst();
+        while(cursor.moveToNext()){
+            arrayList.add(QueryBook(cursor.getString(1)));
+        }
+        cursor.close();
+        return arrayList;
+    }
+
     //更新漂流瓶数据表
     public static void UpdateDrift(List<Drift> drifts){
         db.execSQL("delete from drifttb");  //清空漂流瓶表中数据
@@ -292,12 +310,38 @@ public class DBManager {
      * @param isbn-书籍ISBN号
      * @param bookshelf-书架名
      */
-    public static void insertUserBooktb(String username, String isbn, String bookshelf){
+    public static void insertUserBook(String username, String isbn, String bookshelf){
         ContentValues contentValues = new ContentValues();
         contentValues.put("username",username);
         contentValues.put("bookisbn",isbn);
         contentValues.put("bookshelf",bookshelf);
         db.insert("userbooktb",null,contentValues);
+    }
+
+    /**
+     * 删除一条 用户名-书籍ISBN-书架名 数据
+     * @param username
+     * @param isbn
+     * @param bookshelf
+     */
+    public static void deleteUserBook(String username, String isbn, String bookshelf){
+        db.delete("userbooktb","username = ? and bookisbn = ? and bookshelf = ?",
+                new String[]{username,isbn,bookshelf});
+    }
+
+    /**
+     * 更改一条 用户名-书籍ISBN-书架名 数据，通常是所属书架的更改
+     * @param username
+     * @param isbn
+     * @param bookshelf 新的书架名
+     */
+    public static void editUserBook(String username, String isbn, String bookshelf){
+        ContentValues values = new ContentValues();
+        values.put("username",username);
+        values.put("bookisbn",isbn);
+        values.put("bookshelf",bookshelf);
+        db.update("userbooktb",values,"username = ? and bookisbn = ?",
+                new String[]{username,isbn});
     }
 
     //根据isbn号获取书籍的书评
