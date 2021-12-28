@@ -1,6 +1,3 @@
-# JNU2021软件工程小组作业
+# Book Trace 书迹
 
-- 输入ISBN，返回书籍信息
-- 图书列表界面
-- 图书item点击进入详情页
-- 扫码获取ISBN（有点费时间，待定）
+![](https://gitee.com/streamazure/BookTrace/tree/master/src/大标题)

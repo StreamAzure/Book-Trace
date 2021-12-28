@@ -253,8 +253,9 @@ public class DBManager {
             @SuppressLint("Range") String time = cursor.getString(cursor.getColumnIndex("time"));
             @SuppressLint("Range") String title = cursor.getString(cursor.getColumnIndex("title"));
             @SuppressLint("Range") String book_author = cursor.getString(cursor.getColumnIndex("book_author"));
+            String image = cursor.getString(cursor.getColumnIndex("book_image"));
             @SuppressLint("Range") String recommend = cursor.getString(cursor.getColumnIndex("recommend"));
-            Drift drift = new Drift(id, author_name, time, title,book_author,recommend);
+            Drift drift = new Drift(id, author_name, time, image,title,book_author,recommend);
             drifts.add(drift);
         }
         return drifts;

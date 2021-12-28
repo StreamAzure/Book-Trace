@@ -131,15 +131,15 @@ public class LibraryFragment extends Fragment implements RapidFloatingActionCont
         items.add(new RFACLabelItem<Integer>()
                 .setLabel("手动添加")
                 .setResId(R.mipmap.library_fab_ic_input)
-                .setIconNormalColor(0xffd84315)
-                .setIconPressedColor(0xffbf360c)
+                .setIconNormalColor(0xFF14930c)
+                .setIconPressedColor(0xFF14630c)
                 .setWrapper(0)
         );
         items.add(new RFACLabelItem<Integer>()
                 .setLabel("扫描添加")
                 .setResId(R.mipmap.library_fab_ic_scan)
-                .setIconNormalColor(0xffd84315)
-                .setIconPressedColor(0xffbf360c)
+                .setIconNormalColor(0xFF14930c)
+                .setIconPressedColor(0xFF14630c)
                 .setWrapper(1)
         );
 //        items.add(new RFACLabelItem<Integer>()
@@ -362,13 +362,13 @@ public class LibraryFragment extends Fragment implements RapidFloatingActionCont
         //预先加载三本书，方便调试
         String[] isbn={"9787020024759","9787505352377","9787040195835","9787544210966","9787544211765"};
         mBookList = new ArrayList<>();
-        for(int i = 0; i < isbn.length; i++){
-            Book book = new Book();
-            if(!isBookExist(isbn[i])){ //如果数据库中没有则请求，请求完了加入到（本地）数据库
-                new ISBNApiUtil().getBookFromISBN(book, isbn[i]);
-            }
-            mBookList.add(QueryBook(isbn[i]));
-        }
+//        for(int i = 0; i < isbn.length; i++){
+//            Book book = new Book();
+//            if(!isBookExist(isbn[i])){ //如果数据库中没有则请求，请求完了加入到（本地）数据库
+//                new ISBNApiUtil().getBookFromISBN(book, isbn[i]);
+//            }
+//            mBookList.add(QueryBook(isbn[i]));
+//        }
     }
 
     private void initRecyclerView(View v){
