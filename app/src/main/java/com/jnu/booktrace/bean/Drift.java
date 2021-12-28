@@ -2,7 +2,7 @@ package com.jnu.booktrace.bean;
 
 public class Drift {
     private int id;
-    private int author_id;
+    private String author_name;
     private String time;
     private String book_image;
     private String book_author;
@@ -12,18 +12,18 @@ public class Drift {
     public Drift() {
     }
 
-    public Drift(int id, int author_id, String time, String title, String book_author, String recommend){
+    public Drift(int id, String author_name, String time, String title, String book_author, String recommend){
         this.id = id;
-        this.author_id = author_id;
+        this.author_name = author_name;
         this.time = time;
         this.title = title;
         this.book_author = book_author;
         this.recommend = recommend;
     }
 
-    public Drift(int id, int author_id, String time, String image, String title, String book_author, String recommend) {
+    public Drift(int id, String author_name, String time, String image, String title, String book_author, String recommend) {
         this.id = id;
-        this.author_id = author_id;
+        this.author_name = author_name;
         this.time = time;
         this.book_image = image;
         this.title = title;
@@ -39,12 +39,12 @@ public class Drift {
         this.id = id;
     }
 
-    public int getAuthor_id() {
-        return author_id;
+    public String getAuthor_name() {
+        return author_name;
     }
 
-    public void setAuthor_id(int author_id) {
-        this.author_id = author_id;
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
     }
 
     public String getBook_Author() {

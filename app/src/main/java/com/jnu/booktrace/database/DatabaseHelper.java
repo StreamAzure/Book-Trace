@@ -50,8 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "author integer, relativePost integer, likeCount integer)";
 
         //漂流瓶：ID，用户ID，日期，书籍标题，书籍作者，书籍读后感
-        String sqlCreateDriftTable = "create table drifttb(id integer primary key autoincrement, author_id integer not null, " +
-                "time varchar(20) not null, title varchar(100) not null, book_author varchar(100), recommend text)";
+        String sqlCreateDriftTable = "create table drifttb(id integer primary key autoincrement, author_name varchar(50) not null, " +
+                "time varchar(20) not null, title varchar(100) not null, book_author varchar(100),book_image text, recommend text)";
 
         db.execSQL(sqlCreatePersonTable);
         db.execSQL(sqlCreateBookTable);

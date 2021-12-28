@@ -56,7 +56,7 @@ public class DriftAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MyViewHolder viewHolder = (MyViewHolder) holder;
         Drift drift = drifts.get(position);
-        viewHolder.drift_author.setText(drift.getAuthor_id()+"");
+        viewHolder.drift_author.setText(drift.getAuthor_name()+"");
         viewHolder.rootView.setCardBackgroundColor(colors[position%colors.length]);
         viewHolder.rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
