@@ -23,6 +23,8 @@ import com.jnu.booktrace.bean.Post;
 import com.jnu.booktrace.bean.Reply;
 import com.jnu.booktrace.utils.AndroidBarUtils;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,18 +98,20 @@ public class FreeTalkPostActivity extends AppCompatActivity {
     }
     private void initPoster(){ //初始化并设置楼主的数据
         //要从外面传进来一个Post，但先不管了
-        Post post = new Post(R.drawable.default_avatar, "缄言",
-                "这是书店日记吗","哪一本书中的人物让你看到了自己？");
+        Post post = new Post(R.drawable.pic1, "少女漫步世界",
+                "社恐是借口\n" + "就是想要手里时时刻刻捧着书","哪一本书中的人物让你看到了自己？");
         ImageView avatar = findViewById(R.id.iv_activity_post_avatar);
         TextView username = findViewById(R.id.tv_activity_post_username);
         TextView content = findViewById(R.id.tv_activity_post_content);
         TextView date = findViewById(R.id.tv_activity_post_date);
+        TextView relativeTopic = findViewById(R.id.tv_relativeTopic_title);
         TextView replyCount = findViewById(R.id.tv_activity_post_reply_count);
 
-        avatar.setImageDrawable(this.getDrawable(R.drawable.default_avatar));
+        avatar.setImageDrawable(getDrawable(post.getUserAvatar()));
         username.setText(post.getUsername());
         content.setText(post.getContent());
         date.setText(post.getDate());
+        relativeTopic.setText(post.getRelativeTopic());
         replyCount.setText("共"+replyList.size()+"条回复");
     }
 }
